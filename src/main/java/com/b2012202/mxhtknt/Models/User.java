@@ -1,5 +1,6 @@
 package com.b2012202.mxhtknt.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -59,6 +60,17 @@ public class User implements UserDetails {
             inverseJoinColumns = {@JoinColumn(name = "IDROLE", referencedColumnName = "IDROLE")})
     @JsonManagedReference
     private Set<Role> roles = new HashSet<>();
+
+    // Mối quan hệ với thực thể Bài viết (Many-to-Many)
+    @ManyToMany
+    @JoinTable(
+            name = "LIKED_BAI_VIET",
+            joinColumns = @JoinColumn(name = "ID", referencedColumnName = "ID"),
+            inverseJoinColumns = @JoinColumn(name = "IDBAIVIET", referencedColumnName = "IDBAIVIET")
+    )
+    @JsonManagedReference
+    @JsonIgnore
+    private Set<BaiViet> likedBaiVietSet;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

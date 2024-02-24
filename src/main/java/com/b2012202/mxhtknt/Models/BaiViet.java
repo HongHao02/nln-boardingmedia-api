@@ -1,5 +1,6 @@
 package com.b2012202.mxhtknt.Models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -60,5 +61,10 @@ public class BaiViet {
             })
     @JsonManagedReference
     private Set<Phong> phongSet = new HashSet<>();
+
+    // Mối quan hệ với thực thể Người dùng (Many-to-Many)
+    @ManyToMany(mappedBy = "likedBaiVietSet")
+    @JsonBackReference
+    private Set<User> nguoiDungLikedSet = new HashSet<>();
 
 }

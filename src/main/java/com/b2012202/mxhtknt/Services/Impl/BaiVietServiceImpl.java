@@ -1,6 +1,7 @@
 package com.b2012202.mxhtknt.Services.Impl;
 
 import com.b2012202.mxhtknt.Controller.FileController;
+import com.b2012202.mxhtknt.Repositories.UserRepository;
 import com.b2012202.mxhtknt.Request.BaiVietRequest;
 import com.b2012202.mxhtknt.Request.ResponseObject;
 import com.b2012202.mxhtknt.Models.BaiViet;
@@ -27,6 +28,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class BaiVietServiceImpl implements BaiVietService {
     private final UserService userService;
+    private final UserRepository userRepository;
     private final PhongRepository phongRepository;
     private final IStorageService iStorageService;
     private final BaiVietRepository baiVietRepository;
@@ -116,7 +118,8 @@ public class BaiVietServiceImpl implements BaiVietService {
 
     @Override
     public ResponseObject getByIdBaiViet(Long idBaiViet) {
-        return new ResponseObject("ok", "Get bai viet by ID", baiVietRepository.findById(idBaiViet).orElse(null));
+        return new ResponseObject("ok", "Get bai viet by ID", userRepository.countLikesByIdBaiViet(idBaiViet));
+//        return new ResponseObject("ok", "Get bai viet by ID", baiVietRepository.findById(idBaiViet).orElse(null));
     }
 
     @Override

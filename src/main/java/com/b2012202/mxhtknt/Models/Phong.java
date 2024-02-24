@@ -2,6 +2,7 @@ package com.b2012202.mxhtknt.Models;
 
 import com.b2012202.mxhtknt.Models.EmbeddedId.PhongID;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -45,7 +46,7 @@ public class Phong {
     @Column(name = "TINHTRANG")
     private boolean tinhTrang;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumns({
             @JoinColumn(name = "IDNHATRO", referencedColumnName = "IDNHATRO", insertable = false),
             @JoinColumn(name = "IDLAU", referencedColumnName = "IDLAU", insertable = false)
@@ -56,5 +57,13 @@ public class Phong {
     @ManyToMany(mappedBy = "phongSet", fetch = FetchType.LAZY)
     @JsonBackReference
     private Set<BaiViet> baiVietSet = new HashSet<>();
+
+    @OneToMany(mappedBy = "phong")
+    @JsonIgnore
+    private Set<ChiTietTuVan> chiTietTuVanSet= new HashSet<>();
+
+//    @ManyToMany(mappedBy = "phongTVSet", fetch = FetchType.LAZY)
+//    @JsonBackReference
+//    private Set<TuVan> tuVanSet= new HashSet<>();
 
 }

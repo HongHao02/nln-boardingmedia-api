@@ -49,7 +49,7 @@ public class NhaTroServiceImpl implements NhaTroService {
             }
             return new ResponseObject("failed", "Create NhaTro failed", "");
         } catch (Exception ex) {
-            return new ResponseObject("ok", "Nha Tro must inquire in the same Huyen", ex.getMessage());
+            return new ResponseObject("FAILED: Name of Nha tro must different in the same Huyen of Tinh", ex.getMessage(), null);
         }
     }
 

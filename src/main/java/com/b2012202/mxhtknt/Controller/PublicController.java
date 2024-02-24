@@ -3,6 +3,7 @@ package com.b2012202.mxhtknt.Controller;
 import com.b2012202.mxhtknt.Request.ResponseObject;
 import com.b2012202.mxhtknt.Repositories.BinhLuanRepository;
 import com.b2012202.mxhtknt.Services.BinhLuanService;
+import com.b2012202.mxhtknt.Services.TuVanService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class PublicController {
     private final BinhLuanRepository binhLuanRepository;
     private final BinhLuanService binhLuanService;
+    private final TuVanService tuVanService;
     //Get all binh luan of single baiViet
     @GetMapping("/binhluan/{idBaiViet}")
     public ResponseEntity<ResponseObject> getAllBinhLuan(@PathVariable Long idBaiViet){
@@ -27,4 +29,14 @@ public class PublicController {
     public ResponseEntity<ResponseObject> sayHello(){
         return ResponseEntity.ok(new ResponseObject("ok","Hello this is public request", null));
     }
+
+    //Get all tu van of the boarding house for single chu tro
+    @GetMapping("tuvan/{idChuTro}")
+    public ResponseEntity<ResponseObject> getAllTuVanByIdChuTro(@PathVariable Long idChuTro){
+        return ResponseEntity.ok(tuVanService.getAllTuVanByIdChuTro(idChuTro));
+    }
+
+
+
+
 }

@@ -1,6 +1,6 @@
 package com.b2012202.mxhtknt.Controller;
 
-import com.b2012202.mxhtknt.DTO.ResponseObject;
+import com.b2012202.mxhtknt.Request.ResponseObject;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,4 +19,6 @@ public class UserController {
             return ResponseEntity.internalServerError().body(new ResponseObject("failed","Forbidden",e.getMessage()));
         }
     }
+
+
 }

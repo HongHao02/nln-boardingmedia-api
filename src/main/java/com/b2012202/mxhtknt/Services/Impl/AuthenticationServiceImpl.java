@@ -1,9 +1,9 @@
 package com.b2012202.mxhtknt.Services.Impl;
 
-import com.b2012202.mxhtknt.DTO.JwtAuthenticationResponse;
-import com.b2012202.mxhtknt.DTO.LoginRequest;
-import com.b2012202.mxhtknt.DTO.ResponseObject;
-import com.b2012202.mxhtknt.DTO.SignUpRequest;
+import com.b2012202.mxhtknt.Request.JwtAuthenticationResponse;
+import com.b2012202.mxhtknt.Request.LoginRequest;
+import com.b2012202.mxhtknt.Request.ResponseObject;
+import com.b2012202.mxhtknt.Request.SignUpRequest;
 import com.b2012202.mxhtknt.Models.Role;
 import com.b2012202.mxhtknt.Models.User;
 import com.b2012202.mxhtknt.Services.AuthenticationService;

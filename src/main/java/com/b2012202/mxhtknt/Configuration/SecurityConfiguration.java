@@ -37,6 +37,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/api/v1/posts/**").permitAll()
+                        .requestMatchers("/api/v1/public/**").permitAll()
                         .requestMatchers("/api/v1/admin/**").hasAnyAuthority("ROLE_ADMIN")
                         .requestMatchers("/api/v1/users/**").hasAnyAuthority("ROLE_USER")
                         .requestMatchers("/api/v1/chutro/**").hasAnyAuthority("ROLE_CHUTRO")
@@ -58,12 +59,13 @@ public class SecurityConfiguration {
                                     response.setCharacterEncoding("UTF-8");
 
                                     try (PrintWriter writer = response.getWriter()) {
-                                        writer.write("{\"error\": \"" + errorMessage + "\"}");
+                                        writer.write("{\"error_SCONFIG\": \"" + errorMessage + "\"}");
                                     } catch (IOException e) {
                                         e.getMessage(); // Xử lý exception nếu có
                                     }
                                 })
-                );
+                )
+                ;
         return httpSecurity.build();
 
     }

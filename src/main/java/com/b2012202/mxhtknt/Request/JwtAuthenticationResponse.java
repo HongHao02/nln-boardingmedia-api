@@ -1,4 +1,4 @@
-package com.b2012202.mxhtknt.DTO;
+package com.b2012202.mxhtknt.Request;
 
 import com.b2012202.mxhtknt.Models.User;
 import lombok.AllArgsConstructor;

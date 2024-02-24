@@ -1,17 +1,11 @@
 package com.b2012202.mxhtknt.Controller;
 
-import com.b2012202.mxhtknt.DTO.LoginRequest;
-import com.b2012202.mxhtknt.DTO.ResponseObject;
-import com.b2012202.mxhtknt.DTO.SignUpRequest;
-import com.b2012202.mxhtknt.Models.Role;
-import com.b2012202.mxhtknt.Models.User;
+import com.b2012202.mxhtknt.Request.LoginRequest;
+import com.b2012202.mxhtknt.Request.ResponseObject;
+import com.b2012202.mxhtknt.Request.SignUpRequest;
 import com.b2012202.mxhtknt.Services.AuthenticationService;
-import com.b2012202.mxhtknt.Services.RoleService;
-import com.b2012202.mxhtknt.Services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.cache.SpringCacheBasedUserCache;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

@@ -13,4 +13,7 @@ public interface BinhLuanRepository extends JpaRepository<BinhLuan, Long> {
 
     @Query("SELECT bl FROM BinhLuan bl WHERE bl.baiViet.idBaiViet = :idBaiViet")
     List<BinhLuan> findByBaiVietId(@Param("idBaiViet") Long idBaiViet);
+
+    @Query("SELECT COUNT(bl) FROM BinhLuan bl WHERE bl.baiViet.idBaiViet = :idBaiViet")
+    int countCommentsByIdBaiViet(@Param("idBaiViet") Long idBaiViet);
 }

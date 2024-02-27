@@ -1,20 +1,25 @@
 package com.b2012202.mxhtknt.Services.Impl;
 
 import com.b2012202.mxhtknt.Controller.FileController;
+import com.b2012202.mxhtknt.DTO.BaiVietDTO;
+import com.b2012202.mxhtknt.DTO.BinhLuanDTO;
+import com.b2012202.mxhtknt.DTO.FullInfoBaiVietDTO;
+import com.b2012202.mxhtknt.DTO.UserDTO;
+import com.b2012202.mxhtknt.Models.*;
+import com.b2012202.mxhtknt.Repositories.BinhLuanRepository;
 import com.b2012202.mxhtknt.Repositories.UserRepository;
 import com.b2012202.mxhtknt.Request.BaiVietRequest;
 import com.b2012202.mxhtknt.Request.ResponseObject;
-import com.b2012202.mxhtknt.Models.BaiViet;
 import com.b2012202.mxhtknt.Models.EmbeddedId.PhongID;
-import com.b2012202.mxhtknt.Models.File;
-import com.b2012202.mxhtknt.Models.Phong;
-import com.b2012202.mxhtknt.Models.User;
 import com.b2012202.mxhtknt.Repositories.BaiVietRepository;
 import com.b2012202.mxhtknt.Repositories.PhongRepository;
 import com.b2012202.mxhtknt.Services.BaiVietService;
 import com.b2012202.mxhtknt.Services.IStorageService;
 import com.b2012202.mxhtknt.Services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,6 +37,7 @@ public class BaiVietServiceImpl implements BaiVietService {
     private final PhongRepository phongRepository;
     private final IStorageService iStorageService;
     private final BaiVietRepository baiVietRepository;
+    private final BinhLuanRepository binhLuanRepository;
 
     @Override
     public ResponseObject createBaiViet(BaiVietRequest baiVietRequest) {
@@ -118,8 +124,30 @@ public class BaiVietServiceImpl implements BaiVietService {
 
     @Override
     public ResponseObject getByIdBaiViet(Long idBaiViet) {
-        return new ResponseObject("ok", "Get bai viet by ID", userRepository.countLikesByIdBaiViet(idBaiViet));
-//        return new ResponseObject("ok", "Get bai viet by ID", baiVietRepository.findById(idBaiViet).orElse(null));
+        try {
+            BaiViet existBaiViet = baiVietRepository.findById(idBaiViet).orElse(null);
+            if (existBaiViet == null) {
+                return new ResponseObject("failed", "idBaiViet invalid", null);
+            }
+            List<BinhLuan> binhLuanList = binhLuanRepository.findByBaiViet_IdBaiViet(idBaiViet);
+            List<BinhLuanDTO> binhLuanDTOList = new ArrayList<>();
+            for (BinhLuan bl : binhLuanList) {
+                binhLuanDTOList.add(BinhLuanDTO.builder()
+                        .idBL(bl.getIdBL())
+                        .idBaiViet(bl.getBaiViet().getIdBaiViet())
+                        .user(bl.getUser())
+                        .noiDung(bl.getNoiDung())
+                        .thoiGianBL(bl.getThoiGianBL())
+                        .build());
+            }
+            FullInfoBaiVietDTO fullInfoBaiVietDTO = FullInfoBaiVietDTO.builder()
+                    .baiViet(convertToBaiVietDTO(existBaiViet))
+                    .comments(binhLuanDTOList)
+                    .build();
+            return new ResponseObject("ok", "Get bai viet by ID successfully", fullInfoBaiVietDTO);
+        } catch (Exception ex) {
+            return new ResponseObject("failed", ex.getMessage(), null);
+        }
     }
 
     @Override
@@ -127,4 +155,63 @@ public class BaiVietServiceImpl implements BaiVietService {
         return iStorageService.readFileContent(fileName);
     }
 
+    @Override
+    public ResponseObject getBaiVietListFollowPage(int page, int size) {
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            Page<BaiViet> baiVietPage = baiVietRepository.findAll(pageable);
+            List<BaiViet> baiVietList = baiVietPage.getContent();
+            List<BaiVietDTO> baiVietDTOList = new ArrayList<>();
+            for (BaiViet bv : baiVietList) {
+                int countLikes = userRepository.countLikesByIdBaiViet(bv.getIdBaiViet());
+                int countComments = binhLuanRepository.countCommentsByIdBaiViet(bv.getIdBaiViet());
+                BaiVietDTO baiVietDTO = convertToBaiVietDTO(bv);
+                baiVietDTOList.add(baiVietDTO);
+            }
+            return new ResponseObject("ok", "Get list of bai viet follow by page successfully", baiVietDTOList);
+        } catch (Exception ex) {
+            return new ResponseObject("failed", ex.getMessage(), null);
+        }
+    }
+
+    @Override
+    public ResponseObject deleteBaiViet(Long idBaiViet) {
+        try{
+            BaiViet existBaiViet = baiVietRepository.findById(idBaiViet).orElse(null);
+            if (existBaiViet == null) {
+                return new ResponseObject("failed", "idBaiViet invalid", null);
+            }
+            baiVietRepository.delete(existBaiViet);
+            return new ResponseObject("failed", "delete bai viet successfully", idBaiViet);
+        }catch (Exception ex){
+            return new ResponseObject("failed", ex.getMessage(), null);
+        }
+    }
+
+    public BaiVietDTO convertToBaiVietDTO(BaiViet bv) {
+        int countLikes = userRepository.countLikesByIdBaiViet(bv.getIdBaiViet());
+        int countComments = binhLuanRepository.countCommentsByIdBaiViet(bv.getIdBaiViet());
+        return BaiVietDTO.builder()
+                .idBaiViet(bv.getIdBaiViet())
+                .user(UserDTO.builder()
+                        .id(bv.getUser().getId())
+                        .username(bv.getUser().getUsername())
+                        .firstName(bv.getUser().getFirstName())
+                        .lastName(bv.getUser().getLastName())
+                        .numberPhone(bv.getUser().getNumberPhone())
+                        .gender(bv.getUser().isGender())
+                        .dateOfBirth(bv.getUser().getDateOfBirth())
+                        .cccd(bv.getUser().getCccd())
+                        .avt(bv.getUser().getAvt())
+                        .build())
+                .description(bv.getDescription())
+                .published_at(bv.getPublished_at())
+                .last_update(bv.getLast_update())
+                .lock(bv.isLock())
+                .fileSet(bv.getFileSet())
+                .phongSet(bv.getPhongSet())
+                .countLikes(countLikes)
+                .countComments(countComments)
+                .build();
+    }
 }

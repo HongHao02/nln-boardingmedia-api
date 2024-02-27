@@ -13,6 +13,9 @@ import com.b2012202.mxhtknt.Repositories.XaRepository;
 import com.b2012202.mxhtknt.Services.NhaTroService;
 import com.b2012202.mxhtknt.Services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -56,5 +59,41 @@ public class NhaTroServiceImpl implements NhaTroService {
     @Override
     public ResponseObject getAllNhaTro() {
         return new ResponseObject("ok", "Get all nhatro", nhaTroRepository.findAll());
+    }
+
+    @Override
+    public ResponseObject findByTenNhaTro(String tenNhaTro, int page, int size) {
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            return new ResponseObject("ok", "Get list nha tro By ten nha tro containing", nhaTroRepository.findByTenContaining(tenNhaTro, pageable));
+        } catch (Exception ex) {
+            return new ResponseObject("failed", ex.getMessage(), null);
+        }
+    }
+
+    @Override
+    public ResponseObject findNhaTroByAbsoluteAddress(String tenDuong, String tenXa, String tenHuyen, String tenTinh, int page, int size) {
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            if(tenDuong.isEmpty() || tenXa.isEmpty() || tenHuyen.isEmpty() || tenTinh.isEmpty()){
+                return new ResponseObject("failed", "The address must be not null", null);
+            }
+            XaID xaID= XaID.builder()
+                    .tenXa(tenXa)
+                    .tenHuyen(tenHuyen)
+                    .tenTinh(tenTinh)
+                    .build();
+            Xa existXa = xaRepository.findById(xaID).orElse(null);
+            if(existXa==null){
+                return new ResponseObject("failed", "Address invalid", null);
+            }
+            TuyenDuong existTuyenDuong= tuyenDuongRepository.findById(tenDuong).orElse(null);
+            if(existTuyenDuong==null || !existXa.getTuyenDuongSet().contains(existTuyenDuong)){
+                return new ResponseObject("failed", "Ten duong invalid", null);
+            }
+            return new ResponseObject("ok", "Get list nha tro by absolute address", nhaTroRepository.findByAbsoluteAddress(tenDuong, tenXa, tenHuyen, tenTinh, pageable));
+        } catch (Exception ex) {
+            return new ResponseObject("failed", ex.getMessage(), null);
+        }
     }
 }

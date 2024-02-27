@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name="BINH_LUAN")
 @Getter
@@ -39,5 +41,6 @@ public class BinhLuan {
     @Column(name = "NOIDUNG")
     private String noiDung;
 
-
+    @Column(name = "THOIGIANBL")
+    private LocalDateTime thoiGianBL;
 }

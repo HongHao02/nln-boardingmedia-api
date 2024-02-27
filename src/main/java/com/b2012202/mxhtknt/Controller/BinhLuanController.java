@@ -1,6 +1,7 @@
 package com.b2012202.mxhtknt.Controller;
 
 import com.b2012202.mxhtknt.Request.BinhLuanRequest;
+import com.b2012202.mxhtknt.Request.BinhLuanUpdate;
 import com.b2012202.mxhtknt.Request.ResponseObject;
 import com.b2012202.mxhtknt.Services.BinhLuanService;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,15 @@ public class BinhLuanController {
     @GetMapping("/findById/{idBinhLuan}")
     public ResponseEntity<ResponseObject> getBinhLuanById(@PathVariable Long idBinhLuan){
         return ResponseEntity.ok(binhLuanService.getBinhLuanById(idBinhLuan));
+    }
+
+    @DeleteMapping("/delete/{idBinhLuan}")
+    public ResponseEntity<ResponseObject> deleteBinhLuan(@PathVariable Long idBinhLuan){
+        return ResponseEntity.ok(binhLuanService.deleteBinhLuan(idBinhLuan));
+    }
+    @PutMapping("/update")
+    public ResponseEntity<ResponseObject> updateBinhLuan(@ModelAttribute BinhLuanUpdate binhLuanUpdate){
+        return ResponseEntity.ok(binhLuanService.updateBinhLuan(binhLuanUpdate));
     }
 
     @GetMapping("/hello/test")

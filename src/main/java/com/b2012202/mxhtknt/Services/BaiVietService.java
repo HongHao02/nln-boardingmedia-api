@@ -10,4 +10,8 @@ public interface BaiVietService {
 //    ResponseObject readDetailFile(String fileName);
 
     byte[] getFileByte(String fileName);
+
+    ResponseObject getBaiVietListFollowPage(int page, int size);
+
+    ResponseObject deleteBaiViet(Long idBaiViet);
 }

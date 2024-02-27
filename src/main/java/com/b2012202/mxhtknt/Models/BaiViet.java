@@ -1,6 +1,7 @@
 package com.b2012202.mxhtknt.Models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -38,6 +39,8 @@ public class BaiViet {
     private String description;
     @Column(name = "PUBLISHED_AT")
     private LocalDateTime published_at = LocalDateTime.now();
+    @Column(name = "LAST_UPDATE")
+    private LocalDateTime last_update = LocalDateTime.now();
     @Column(name = "LOCK")
     private boolean lock;
 
@@ -50,7 +53,7 @@ public class BaiViet {
     @JsonManagedReference
     private Set<File> fileSet = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "BAIVIET_PHONG",
             joinColumns = {@JoinColumn(name = "IDBAIVIET", referencedColumnName = "IDBAIVIET")},
@@ -66,5 +69,9 @@ public class BaiViet {
     @ManyToMany(mappedBy = "likedBaiVietSet")
     @JsonBackReference
     private Set<User> nguoiDungLikedSet = new HashSet<>();
+
+    @OneToMany(mappedBy = "baiViet", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<BinhLuan> binhLuanSet= new HashSet<>();
 
 }

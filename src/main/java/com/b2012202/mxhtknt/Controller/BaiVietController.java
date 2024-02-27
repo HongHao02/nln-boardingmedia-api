@@ -21,18 +21,16 @@ public class BaiVietController {
     public ResponseEntity<ResponseObject> createBaiViet(@ModelAttribute BaiVietRequest baiVietRequest){
         return ResponseEntity.ok(baiVietService.createBaiViet(baiVietRequest));
     }
+    @DeleteMapping("/delete/{idBaiViet}")
+    public ResponseEntity<ResponseObject> deleteBaiViet(@PathVariable Long idBaiViet){
+        return ResponseEntity.ok(baiVietService.deleteBaiViet(idBaiViet));
+    }
     @GetMapping("/{idBaiViet}")
     public ResponseEntity<ResponseObject> getByIdBaiViet(@PathVariable Long idBaiViet){
         return ResponseEntity.ok(baiVietService.getByIdBaiViet(idBaiViet));
     }
-//    @GetMapping("/{fileName:.+}")
-//    public ResponseEntity<byte[]> readDetailFile(@PathVariable String fileName) {
-//        try {
-//            return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(baiVietService.getFileByte(fileName));//dung thay cho HttpStatus.OK
-//        } catch (Exception e) {
-//            return ResponseEntity.noContent().build();
-//        }
-//    }
+
+
 
 
 

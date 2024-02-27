@@ -4,6 +4,8 @@ import com.b2012202.mxhtknt.Models.User;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 public class BinhLuanDTO {
@@ -11,4 +13,5 @@ public class BinhLuanDTO {
     private Long idBaiViet;
     private User user;
     private String noiDung;
+    private LocalDateTime thoiGianBL;
 }

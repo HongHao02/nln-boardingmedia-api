@@ -54,7 +54,7 @@ public class Phong {
     @JsonBackReference
     private Lau lau;
 
-    @ManyToMany(mappedBy = "phongSet", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "phongSet", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonBackReference
     private Set<BaiViet> baiVietSet = new HashSet<>();
 

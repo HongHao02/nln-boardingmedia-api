@@ -56,10 +56,19 @@ public class PublicController {
         return ResponseEntity.ok(new ResponseObject("ok", "Hello this is public request", null));
     }
 
-    //Get all tu van of the boarding house for single chu tro
+    /**
+     * Get all tu van of the boarding house for single chu tro
+     */
     @GetMapping("tuvan/{idChuTro}")
     public ResponseEntity<ResponseObject> getAllTuVanByIdChuTro(@PathVariable Long idChuTro) {
         return ResponseEntity.ok(tuVanService.getAllTuVanByIdChuTro(idChuTro));
+    }
+    /**
+     * Get list of tu van of user
+     */
+    @GetMapping("tuvan/user/{id}")
+    public ResponseEntity<ResponseObject> getAllTuVanByIdUser(@PathVariable Long id) {
+        return ResponseEntity.ok(tuVanService.getAllTuVanByIdUser(id));
     }
 
     //Find nha tro

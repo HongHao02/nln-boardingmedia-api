@@ -1,5 +1,7 @@
 package com.b2012202.mxhtknt.Services.Impl;
 
+import com.b2012202.mxhtknt.DTO.ListTuVanDTO;
+import com.b2012202.mxhtknt.DTO.TuVanDTO;
 import com.b2012202.mxhtknt.Models.*;
 import com.b2012202.mxhtknt.Models.EmbeddedId.ChiTietTuVanID;
 import com.b2012202.mxhtknt.Models.EmbeddedId.PhongID;
@@ -16,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -90,27 +93,78 @@ public class TuVanServiceImpl implements TuVanService {
 
     @Override
     public ResponseObject getAllTuVanByIdChuTro(Long idChuTro) {
-        User existUser = userService.findUserById(idChuTro);
-        if (existUser == null) {
-            return new ResponseObject("failed", "User invalid", null);
+        try {
+            User existUser = userService.findUserById(idChuTro);
+            if (existUser == null) {
+                return new ResponseObject("failed", "User invalid", null);
+            }
+            Integer countTuVans = tuVanRepository.countTuVanById(existUser.getId());
+            List<TuVan> tuVanList = tuVanRepository.findByBaiViet_user_id(idChuTro);
+            if (tuVanList == null) {
+                return new ResponseObject("ok", "There is any requests", null);
+            }
+            List<TuVanDTO> tuVanDTOList = new ArrayList<>();
+            for (TuVan tv : tuVanList) {
+                TuVanDTO tuVanDTO = TuVanDTO.builder()
+                        .idTV(tv.getIdTV())
+                        .idBaiViet(tv.getBaiViet().getIdBaiViet())
+                        .user(tv.getUser())
+                        .chiTietTuVanSet(tv.getChiTietTuVanSet())
+                        .viewed(tv.isViewed())
+                        .build();
+                tuVanDTOList.add(tuVanDTO);
+            }
+            return new ResponseObject("ok", "get all tu van requests for chu tro", ListTuVanDTO.builder()
+                    .countTuVans(countTuVans)
+                    .tuVanDTOList(tuVanDTOList)
+                    .build());
+        } catch (Exception ex) {
+            return new ResponseObject("failed", ex.getMessage(), null);
         }
-        List<TuVan> tuVanList = tuVanRepository.findByBaiViet_user_id(idChuTro);
-        if (tuVanList == null) {
-            return new ResponseObject("ok", "There is any requests", null);
-        }
-        return new ResponseObject("ok", "Get all requests for chu tro", tuVanList);
     }
 
     @Override
     public ResponseObject updateViewed(Long idTV) {
-        try{
-            TuVan existTuVan= tuVanRepository.findById(idTV).orElse(null);
-            if(existTuVan==null){
-                return new ResponseObject("failed","Tu van invalid", null);
+        try {
+            TuVan existTuVan = tuVanRepository.findById(idTV).orElse(null);
+            if (existTuVan == null) {
+                return new ResponseObject("failed", "Tu van invalid", null);
             }
             existTuVan.setViewed(true);
 
-            return new ResponseObject("ok","Update viewed of tu van successfully", tuVanRepository.save(existTuVan));
+            return new ResponseObject("ok", "Update viewed of tu van successfully", tuVanRepository.save(existTuVan));
+        } catch (Exception ex) {
+            return new ResponseObject("failed", ex.getMessage(), null);
+        }
+    }
+
+    @Override
+    public ResponseObject getAllTuVanByIdUser(Long id) {
+        try{
+            User existUser = userService.findUserById(id);
+            if (existUser == null) {
+                return new ResponseObject("failed", "User invalid", null);
+            }
+            Integer countViewed = tuVanRepository.countViewedByUserId(existUser.getId());
+            List<TuVan> tuVanList = tuVanRepository.findByUserId(existUser.getId());
+            if (tuVanList == null) {
+                return new ResponseObject("ok", "There is any requests", null);
+            }
+            List<TuVanDTO> tuVanDTOList = new ArrayList<>();
+            for (TuVan tv : tuVanList) {
+                TuVanDTO tuVanDTO = TuVanDTO.builder()
+                        .idTV(tv.getIdTV())
+                        .idBaiViet(tv.getBaiViet().getIdBaiViet())
+                        .user(null)
+                        .chiTietTuVanSet(tv.getChiTietTuVanSet())
+                        .viewed(tv.isViewed())
+                        .build();
+                tuVanDTOList.add(tuVanDTO);
+            }
+            return new ResponseObject("ok", "get all tu van requests for chu tro", ListTuVanDTO.builder()
+                    .countViewed(countViewed)
+                    .tuVanDTOList(tuVanDTOList)
+                    .build());
         }catch (Exception ex){
             return new ResponseObject("failed", ex.getMessage(), null);
         }

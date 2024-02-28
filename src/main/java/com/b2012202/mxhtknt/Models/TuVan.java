@@ -42,7 +42,7 @@ public class TuVan {
     private Set<ChiTietTuVan> chiTietTuVanSet= new HashSet<>();
 
     @Column(name = "VIEWED")
-    private boolean viewed;
+    private boolean viewed = false;
 
     //We have attribute 'thoiGianTuVan', cannot use ManyToMany
 //    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

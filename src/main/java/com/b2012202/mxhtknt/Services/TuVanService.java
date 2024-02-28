@@ -11,4 +11,6 @@ public interface TuVanService {
     ResponseObject getAllTuVanByIdChuTro(Long idChuTro);
 
     ResponseObject updateViewed(Long idTV);
+
+    ResponseObject getAllTuVanByIdUser(Long id);
 }

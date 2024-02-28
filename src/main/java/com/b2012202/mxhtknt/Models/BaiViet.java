@@ -42,10 +42,8 @@ public class BaiViet {
     private LocalDateTime last_update = LocalDateTime.now();
     @Column(name = "LOCK")
     private boolean lock;
-
     @Column(name = "DELETED")
     private boolean deleted = false;
-
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "BAIVIET_FILE",

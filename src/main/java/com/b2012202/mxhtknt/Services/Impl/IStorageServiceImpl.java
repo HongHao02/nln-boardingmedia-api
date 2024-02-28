@@ -1,15 +1,20 @@
 package com.b2012202.mxhtknt.Services.Impl;
 
+import com.b2012202.mxhtknt.Controller.FileController;
+import com.b2012202.mxhtknt.DTO.ConvertSetFileDTO;
+import com.b2012202.mxhtknt.Models.File;
 import com.b2012202.mxhtknt.Services.IStorageService;
-import lombok.RequiredArgsConstructor;
+import jakarta.servlet.http.HttpServlet;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,8 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Arrays;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Stream;
 @Service
 public class IStorageServiceImpl implements IStorageService {
@@ -77,7 +81,7 @@ public class IStorageServiceImpl implements IStorageService {
                 logger.error("Cannot store file outside directory");
                 return "";
             }
-            //neu ma co ton tai thi thay the, ghi de len
+            //neu ma co ton tai thi thay the ghi de len
             try (InputStream inputStream = file.getInputStream()) {
                 Files.copy(inputStream, destinationFilePath, StandardCopyOption.REPLACE_EXISTING);
             }
@@ -120,14 +124,69 @@ public class IStorageServiceImpl implements IStorageService {
             Path file = stogareFolder.resolve(fileName);
             Resource resource = new UrlResource(file.toUri());
             if (resource.exists() || resource.isReadable()) {
-                byte[] bytes = StreamUtils.copyToByteArray(resource.getInputStream());
-                return bytes;
+                return StreamUtils.copyToByteArray(resource.getInputStream());
             } else {
                 throw new RuntimeException("Could not read file " + fileName);
             }
 
         } catch (IOException e) {
             throw new RuntimeException("Could not read file: " + fileName, e);
+        }
+    }
+
+    @Override
+    public ConvertSetFileDTO convertToSetFile(List<MultipartFile> files) {
+        try{
+            List<String> filesURL = new ArrayList<>();
+            for (MultipartFile file : files) {
+                System.out.println("~~~>FILE: " + file.getOriginalFilename());
+                String fileName = storeFile(file);
+                if (fileName == null) {
+                    return ConvertSetFileDTO.builder()
+                            .status(415)
+                            .message("Can not store file! Format or size is invalid")
+                    .build();
+                }
+                Path[] paths = loadFile(fileName).toArray(Path[]::new);
+                //Check if filePath is existing
+                if (paths.length > 0) {
+                    Path filePath = paths[0];
+                    String urlPath = MvcUriComponentsBuilder.fromMethodName(FileController.class,
+                            "readDetailFile", filePath.getFileName().toString()).build().toUri().toString();
+                    System.out.println("~~~>fileURL: " + urlPath);
+                    if (Objects.equals(urlPath, "")) {
+                        return ConvertSetFileDTO.builder()
+                                .status(100)
+                                .message("Can not read urlPath!")
+                                .build();
+                    }
+                    filesURL.add(urlPath);
+                }
+            }
+            //add file to BaiViet
+            Set<File> fileSet = new HashSet<>();
+            if (!filesURL.isEmpty()) {
+                for (String fileName : filesURL) {
+                    File file = File.builder()
+                            .url(fileName)
+                            .build();
+                    fileSet.add(file);
+                }
+            } else {
+                return ConvertSetFileDTO.builder()
+                        .status(101)
+                        .message("Can set file in Set")
+                        .build();
+            }
+            return ConvertSetFileDTO.builder()
+                    .fileSet(fileSet)
+                    .message("success")
+                    .build();
+        }catch (Exception ex){
+            return ConvertSetFileDTO.builder()
+                    .status(400)
+                    .message(ex.getMessage())
+                    .build();
         }
     }
 }

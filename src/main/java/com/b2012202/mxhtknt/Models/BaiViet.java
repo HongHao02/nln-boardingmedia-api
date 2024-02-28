@@ -1,7 +1,6 @@
 package com.b2012202.mxhtknt.Models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -44,6 +43,9 @@ public class BaiViet {
     @Column(name = "LOCK")
     private boolean lock;
 
+    @Column(name = "DELETED")
+    private boolean deleted = false;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "BAIVIET_FILE",
@@ -70,8 +72,5 @@ public class BaiViet {
     @JsonBackReference
     private Set<User> nguoiDungLikedSet = new HashSet<>();
 
-    @OneToMany(mappedBy = "baiViet", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Set<BinhLuan> binhLuanSet= new HashSet<>();
 
 }

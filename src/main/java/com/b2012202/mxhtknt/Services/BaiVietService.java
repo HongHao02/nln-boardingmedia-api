@@ -2,6 +2,7 @@ package com.b2012202.mxhtknt.Services;
 
 import com.b2012202.mxhtknt.Request.BaiVietRequest;
 import com.b2012202.mxhtknt.Request.ResponseObject;
+import com.b2012202.mxhtknt.Request.UpdateBaiVietRequest;
 
 public interface BaiVietService {
     ResponseObject createBaiViet(BaiVietRequest baiVietRequest);
@@ -14,4 +15,6 @@ public interface BaiVietService {
     ResponseObject getBaiVietListFollowPage(int page, int size);
 
     ResponseObject deleteBaiViet(Long idBaiViet);
+
+    ResponseObject updateBaiViet(UpdateBaiVietRequest updateBaiVietRequest);
 }

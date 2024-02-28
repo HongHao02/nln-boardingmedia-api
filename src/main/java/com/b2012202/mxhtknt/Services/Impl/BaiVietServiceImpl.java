@@ -1,10 +1,7 @@
 package com.b2012202.mxhtknt.Services.Impl;
 
 import com.b2012202.mxhtknt.Controller.FileController;
-import com.b2012202.mxhtknt.DTO.BaiVietDTO;
-import com.b2012202.mxhtknt.DTO.BinhLuanDTO;
-import com.b2012202.mxhtknt.DTO.FullInfoBaiVietDTO;
-import com.b2012202.mxhtknt.DTO.UserDTO;
+import com.b2012202.mxhtknt.DTO.*;
 import com.b2012202.mxhtknt.Models.*;
 import com.b2012202.mxhtknt.Repositories.BinhLuanRepository;
 import com.b2012202.mxhtknt.Repositories.UserRepository;
@@ -13,6 +10,7 @@ import com.b2012202.mxhtknt.Request.ResponseObject;
 import com.b2012202.mxhtknt.Models.EmbeddedId.PhongID;
 import com.b2012202.mxhtknt.Repositories.BaiVietRepository;
 import com.b2012202.mxhtknt.Repositories.PhongRepository;
+import com.b2012202.mxhtknt.Request.UpdateBaiVietRequest;
 import com.b2012202.mxhtknt.Services.BaiVietService;
 import com.b2012202.mxhtknt.Services.IStorageService;
 import com.b2012202.mxhtknt.Services.UserService;
@@ -54,7 +52,7 @@ public class BaiVietServiceImpl implements BaiVietService {
                     .build();
             Phong existPhong = phongRepository.findById(phongID).orElse(null);
             if (existPhong == null) {
-                return new ResponseObject("failed", "Bai viet must have one Phong", null);
+                return new ResponseObject("failed", "post must have one Phong", null);
             }
             BaiViet baiViet = BaiViet.builder()
                     .description(baiVietRequest.getDescription())
@@ -63,7 +61,6 @@ public class BaiVietServiceImpl implements BaiVietService {
                     .published_at(LocalDateTime.now())
                     .phongSet(new HashSet<>())
                     .build();
-
             System.out.println("~~~PHONG SET: " + baiViet.getPhongSet());
             //Handle file
             List<MultipartFile> files = baiVietRequest.getFiles();
@@ -88,7 +85,7 @@ public class BaiVietServiceImpl implements BaiVietService {
 //                            String urlPath = baseUrl + "chutro/baiviet/" + filename;
                             System.out.println("~~~>fileURL: " + urlPath);
                             if (Objects.equals(urlPath, "")) {
-                                return new ResponseObject("failed", "Failed to generate file path", null);
+                                return new ResponseObject("failed", "failed to generate file path", null);
                             }
                             filesURL.add(urlPath);
                         }
@@ -103,20 +100,16 @@ public class BaiVietServiceImpl implements BaiVietService {
                             fileSet.add(file);
                         }
                     } else {
-                        return new ResponseObject("failed", "Can not add file to fileSet", null);
+                        return new ResponseObject("failed", "can not add file to fileSet", null);
                     }
                     baiViet.setFileSet(fileSet);
-                    //add Phong to BaiViet
-                    baiViet.getPhongSet().add(existPhong);
-                    return new ResponseObject("ok", "Create Bai viet successfully", baiVietRepository.save(baiViet));
                 } catch (Exception ex) {
                     return new ResponseObject("failed", ex.getCause().toString(), null);
                 }
             }
-            //Set Phong for BaiViet
+            //add Phong to BaiViet
             baiViet.getPhongSet().add(existPhong);
-
-            return new ResponseObject("ok", "Create BaiViet successfully", baiVietRepository.save(baiViet));
+            return new ResponseObject("ok", "create post successfully", baiVietRepository.save(baiViet));
         } catch (Exception e) {
             return new ResponseObject("failed", e.getMessage(), null);
         }
@@ -144,7 +137,7 @@ public class BaiVietServiceImpl implements BaiVietService {
                     .baiViet(convertToBaiVietDTO(existBaiViet))
                     .comments(binhLuanDTOList)
                     .build();
-            return new ResponseObject("ok", "Get bai viet by ID successfully", fullInfoBaiVietDTO);
+            return new ResponseObject("ok", "get post by ID successfully", fullInfoBaiVietDTO);
         } catch (Exception ex) {
             return new ResponseObject("failed", ex.getMessage(), null);
         }
@@ -168,21 +161,50 @@ public class BaiVietServiceImpl implements BaiVietService {
                 BaiVietDTO baiVietDTO = convertToBaiVietDTO(bv);
                 baiVietDTOList.add(baiVietDTO);
             }
-            return new ResponseObject("ok", "Get list of bai viet follow by page successfully", baiVietDTOList);
+            return new ResponseObject("ok", "get list of bai viet follow by page and size successfully", baiVietDTOList);
+        } catch (Exception ex) {
+            return new ResponseObject("failed", ex.getMessage(), null);
+        }
+    }
+
+    /**
+     * Update attribute: delete, cannot find by getById(idBaiViet) similar deleted
+     */
+    @Override
+    public ResponseObject deleteBaiViet(Long idBaiViet) {
+        try {
+            BaiViet existBaiViet = baiVietRepository.findById(idBaiViet).orElse(null);
+            if (existBaiViet == null) {
+                return new ResponseObject("failed", "idBaiViet invalid", null);
+            }
+            existBaiViet.setDeleted(true);
+            baiVietRepository.save(existBaiViet);
+            return new ResponseObject("failed", "delete bai viet successfully", idBaiViet);
         } catch (Exception ex) {
             return new ResponseObject("failed", ex.getMessage(), null);
         }
     }
 
     @Override
-    public ResponseObject deleteBaiViet(Long idBaiViet) {
+    public ResponseObject updateBaiViet(UpdateBaiVietRequest updateBaiVietRequest) {
         try{
-            BaiViet existBaiViet = baiVietRepository.findById(idBaiViet).orElse(null);
+            BaiViet existBaiViet = baiVietRepository.findById(updateBaiVietRequest.getIdBaiViet()).orElse(null);
             if (existBaiViet == null) {
                 return new ResponseObject("failed", "idBaiViet invalid", null);
             }
-            baiVietRepository.delete(existBaiViet);
-            return new ResponseObject("failed", "delete bai viet successfully", idBaiViet);
+            if(!updateBaiVietRequest.getDescription().isEmpty()){
+                existBaiViet.setDescription(updateBaiVietRequest.getDescription());
+            }
+            existBaiViet.setLock(updateBaiVietRequest.isLock());
+            existBaiViet.setLast_update(LocalDateTime.now());
+            if(!updateBaiVietRequest.getFiles().isEmpty()){
+                ConvertSetFileDTO cv= iStorageService.convertToSetFile(updateBaiVietRequest.getFiles());
+                if(!cv.getMessage().equals("success")){
+                    return new ResponseObject("failed", cv.getMessage(), null);
+                }
+                existBaiViet.setFileSet(cv.getFileSet());
+            }
+            return new ResponseObject("ok", "Update post successfully", baiVietRepository.save(existBaiViet));
         }catch (Exception ex){
             return new ResponseObject("failed", ex.getMessage(), null);
         }

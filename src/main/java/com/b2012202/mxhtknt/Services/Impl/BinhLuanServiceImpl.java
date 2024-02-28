@@ -32,11 +32,14 @@ public class BinhLuanServiceImpl implements BinhLuanService {
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
             User existUser = userService.findUserByUsername(username);
             if (existUser == null) {
-                return new ResponseObject("failed", "User info invalid", null);
+                return new ResponseObject("failed", "user info invalid", null);
             }
             BaiViet existBaiViet= baiVietRepository.findById(binhLuanRequest.getIdBaiViet()).orElse(null);
             if(existBaiViet==null){
-                return new ResponseObject("failed", "BaiViet invalid", null);
+                return new ResponseObject("failed", "post info invalid", null);
+            }
+            if(existBaiViet.isLock()){
+                return new ResponseObject("failed", "comment denied", null);
             }
             BinhLuan binhLuan= BinhLuan.builder()
                     .baiViet(existBaiViet)
@@ -45,7 +48,7 @@ public class BinhLuanServiceImpl implements BinhLuanService {
                     .thoiGianBL(LocalDateTime.now())
                     .build();
 
-            return new ResponseObject("ok","Create binh luan successfully", binhLuanRepository.save(binhLuan));
+            return new ResponseObject("ok","create comment successfully", binhLuanRepository.save(binhLuan));
         }catch (Exception ex){
             return new ResponseObject("failed", ex.getMessage(), null);
         }
@@ -81,9 +84,9 @@ public class BinhLuanServiceImpl implements BinhLuanService {
         try{
             BinhLuan existBinhLuan= binhLuanRepository.findById(idBinhLuan).orElse(null);
             if(existBinhLuan==null){
-                return new ResponseObject("ok","Invalid comment", null);
+                return new ResponseObject("ok","invalid comment", null);
             }
-            return new ResponseObject("ok","Get comment by id", existBinhLuan);
+            return new ResponseObject("ok","get comment by id", existBinhLuan);
         }catch (Exception ex){
             return new ResponseObject("failed", ex.getMessage(), null);
         }
@@ -94,10 +97,10 @@ public class BinhLuanServiceImpl implements BinhLuanService {
         try{
             BinhLuan existBinhLuan= binhLuanRepository.findById(idBinhLuan).orElse(null);
             if(existBinhLuan==null){
-                return new ResponseObject("failed","Binh luan invalid", null);
+                return new ResponseObject("failed","id of comment invalid", null);
             }
             binhLuanRepository.delete(existBinhLuan);
-            return new ResponseObject("ok","Delete Binh luan successfully", idBinhLuan);
+            return new ResponseObject("ok","delete comment successfully", idBinhLuan);
         }catch (Exception ex){
             return new ResponseObject("failed", ex.getMessage(), null);
         }
@@ -108,10 +111,10 @@ public class BinhLuanServiceImpl implements BinhLuanService {
         try{
             BinhLuan existBinhLuan= binhLuanRepository.findById(binhLuanRequest.getIdBinhLuan()).orElse(null);
             if(existBinhLuan==null){
-                return new ResponseObject("failed","Binh luan invalid", null);
+                return new ResponseObject("failed","id of comment invalid", null);
             }
             existBinhLuan.setNoiDung(binhLuanRequest.getNoiDung());
-            return new ResponseObject("ok","Update Binh luan successfully", existBinhLuan);
+            return new ResponseObject("ok","update comment successfully", existBinhLuan);
         }catch (Exception ex){
             return new ResponseObject("failed", ex.getMessage(), null);
         }

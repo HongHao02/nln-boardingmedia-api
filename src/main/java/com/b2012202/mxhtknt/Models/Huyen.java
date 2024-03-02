@@ -29,7 +29,7 @@ public class Huyen {
     @JsonBackReference
     private Tinh tinh;
 
-    @OneToMany(mappedBy = "huyen")
+    @OneToMany(mappedBy = "huyen", cascade = CascadeType.ALL)
     @JsonManagedReference
     private Set<Xa> xaSet= new HashSet<>();
 

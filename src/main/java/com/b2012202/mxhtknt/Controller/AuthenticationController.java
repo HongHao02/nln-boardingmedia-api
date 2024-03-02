@@ -28,4 +28,9 @@ public class AuthenticationController {
     public ResponseEntity<ResponseObject> findUserById(@PathVariable Long idUser){
         return ResponseEntity.ok(authenticationService.findUserById(idUser));
     }
+    @GetMapping("/refresh")
+    public ResponseEntity<ResponseObject> refreshToken(@RequestParam String token){
+        return ResponseEntity.ok(authenticationService.refreshToken(token));
+    }
+
 }

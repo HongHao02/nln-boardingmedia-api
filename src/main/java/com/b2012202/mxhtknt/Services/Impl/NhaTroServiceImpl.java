@@ -1,12 +1,11 @@
 package com.b2012202.mxhtknt.Services.Impl;
 
+import com.b2012202.mxhtknt.DTO.NhaTroDTO;
+import com.b2012202.mxhtknt.Models.*;
+import com.b2012202.mxhtknt.Repositories.PhongRepository;
 import com.b2012202.mxhtknt.Request.NhaTroRequest;
 import com.b2012202.mxhtknt.Request.ResponseObject;
 import com.b2012202.mxhtknt.Models.EmbeddedId.XaID;
-import com.b2012202.mxhtknt.Models.NhaTro;
-import com.b2012202.mxhtknt.Models.TuyenDuong;
-import com.b2012202.mxhtknt.Models.User;
-import com.b2012202.mxhtknt.Models.Xa;
 import com.b2012202.mxhtknt.Repositories.NhaTroRepository;
 import com.b2012202.mxhtknt.Repositories.TuyenDuongRepository;
 import com.b2012202.mxhtknt.Repositories.XaRepository;
@@ -19,6 +18,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class NhaTroServiceImpl implements NhaTroService {
@@ -26,6 +28,7 @@ public class NhaTroServiceImpl implements NhaTroService {
     private final TuyenDuongRepository tuyenDuongRepository;
     private final UserService userService;
     private final NhaTroRepository nhaTroRepository;
+    private final PhongRepository phongRepository;
 
     @Override
     public ResponseObject createNhaTro(NhaTroRequest nhaTroRequest) {
@@ -93,6 +96,62 @@ public class NhaTroServiceImpl implements NhaTroService {
             }
             return new ResponseObject("ok", "Get list nha tro by absolute address", nhaTroRepository.findByAbsoluteAddress(tenDuong, tenXa, tenHuyen, tenTinh, pageable));
         } catch (Exception ex) {
+            return new ResponseObject("failed", ex.getMessage(), null);
+        }
+    }
+
+    @Override
+    public ResponseObject findNhaTroById() {
+        try{
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+            User existUser = userService.findUserByUsername(username);
+            if (existUser == null) {
+                return new ResponseObject("failed", "User info invalid", null);
+            }
+
+            List<NhaTro> nhaTroList= nhaTroRepository.findByUser_Id(existUser.getId());
+            System.out.println("~~~>NhatroList " + nhaTroList);
+            List<NhaTroDTO> nhaTroDTOList = new ArrayList<>();
+            for(NhaTro nt : nhaTroList){
+                List<Phong> phongList= phongRepository.findByPhongID_IdNhaTro(nt.getIdNhaTro());
+                System.out.println("~~~>PhongList "+ phongList);
+                NhaTroDTO nhaTroDTO= NhaTroDTO.builder()
+                        .id(nt.getUser().getId())
+                        .idNhaTro(nt.getIdNhaTro())
+                        .tenNhaTro(nt.getTenNhaTro())
+                        .tenDuong(nt.getTuyenDuong().getTenDuong())
+                        .tenXa(nt.getXa().getXaID().getTenXa())
+                        .tenHuyen(nt.getXa().getXaID().getTenHuyen())
+                        .tenTinh(nt.getXa().getXaID().getTenTinh())
+                        .lauSet(nt.getLauSet())
+                        .build();
+                nhaTroDTOList.add(nhaTroDTO);
+            }
+            return new ResponseObject("ok", "Get nha tro by id User successfully", nhaTroDTOList);
+        }catch (Exception ex){
+            return new ResponseObject("failed", ex.getMessage(), null);
+        }
+    }
+
+    @Override
+    public ResponseObject getNhaTroByIdNhaTro(Long idNhaTro) {
+        try{
+            NhaTro eixisNhaTro= nhaTroRepository.findById(idNhaTro).orElse(null);
+            if(eixisNhaTro==null){
+                return new ResponseObject("failed","idNhaTro invalid",null);
+            }
+            NhaTroDTO nhaTroDTO= NhaTroDTO.builder()
+                    .id(eixisNhaTro.getUser().getId())
+                    .idNhaTro(eixisNhaTro.getIdNhaTro())
+                    .tenNhaTro(eixisNhaTro.getTenNhaTro())
+                    .tenDuong(eixisNhaTro.getTuyenDuong().getTenDuong())
+                    .tenXa(eixisNhaTro.getXa().getXaID().getTenXa())
+                    .tenHuyen(eixisNhaTro.getXa().getXaID().getTenHuyen())
+                    .tenTinh(eixisNhaTro.getXa().getXaID().getTenTinh())
+                    .lauSet(eixisNhaTro.getLauSet())
+                    .build();
+            return new ResponseObject("ok", "get nha tro by idNhaTro successfully", nhaTroDTO);
+        }catch (Exception ex){
             return new ResponseObject("failed", ex.getMessage(), null);
         }
     }

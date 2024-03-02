@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface NhaTroRepository extends JpaRepository<NhaTro, Long> {
     @Query("SELECT n FROM NhaTro n WHERE n.tenNhaTro LIKE %:tenNhaTro%")
     Page<NhaTro> findByTenContaining(@Param("tenNhaTro") String ten, Pageable pageable);
@@ -23,4 +25,7 @@ public interface NhaTroRepository extends JpaRepository<NhaTro, Long> {
             @Param("tenTinh") String tenTinh,
             Pageable pageable
     );
+
+    List<NhaTro> findByUser_Id(Long id);
+
 }

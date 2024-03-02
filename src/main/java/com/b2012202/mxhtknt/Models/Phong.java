@@ -28,23 +28,23 @@ public class Phong {
 
     //For generate auto idPhong
     // ADD this statement in sql script: CREATE SEQUENCE phong_sequence START WITH 1 INCREMENT BY 1;
-    @SequenceGenerator(
-            name = "phong_sequence",
-            sequenceName = "phong_sequence",
-            allocationSize = 1 //increment by 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "phong_sequence"
-    )
-    private Long sequenceValue;
+//    @SequenceGenerator(
+//            name = "phong_sequence",
+//            sequenceName = "phong_sequence",
+//            allocationSize = 1 //increment by 1
+//    )
+//    @GeneratedValue(
+//            strategy = GenerationType.SEQUENCE,
+//            generator = "phong_sequence"
+//    )
+//    private Long sequenceValue;
 
     @Column(name = "STTPHONG")
     private Integer sttPhong;
     @Column(name = "GIAPHONG")
     private Double giaPhong;
     @Column(name = "TINHTRANG")
-    private boolean tinhTrang;
+    private boolean tinhTrang= true;
 
     @ManyToOne
     @JoinColumns({

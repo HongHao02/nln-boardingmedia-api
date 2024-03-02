@@ -7,4 +7,6 @@ public interface PhongService {
     ResponseObject createPhong(PhongRequest phongRequest);
 
     ResponseObject getPhongByID(Long idPhong);
+
+    ResponseObject updateTinhTrang(Long idPhong);
 }

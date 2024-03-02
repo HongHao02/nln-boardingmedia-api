@@ -14,4 +14,5 @@ public class BinhLuanDTO {
     private User user;
     private String noiDung;
     private LocalDateTime thoiGianBL;
+    private Integer countComments;
 }

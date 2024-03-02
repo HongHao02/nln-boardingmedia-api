@@ -52,12 +52,13 @@ public class BaiVietServiceImpl implements BaiVietService {
                     .build();
             Phong existPhong = phongRepository.findById(phongID).orElse(null);
             if (existPhong == null) {
-                return new ResponseObject("failed", "post must have one Phong", null);
+                return new ResponseObject("failed", "room is invalid or unavailable", null);
             }
             BaiViet baiViet = BaiViet.builder()
                     .description(baiVietRequest.getDescription())
                     .lock(baiVietRequest.isLock())
                     .user(existUser)
+                    .deleted(false)
                     .published_at(LocalDateTime.now())
                     .phongSet(new HashSet<>())
                     .build();
@@ -226,6 +227,22 @@ public class BaiVietServiceImpl implements BaiVietService {
                         .cccd(bv.getUser().getCccd())
                         .avt(bv.getUser().getAvt())
                         .build())
+                .description(bv.getDescription())
+                .published_at(bv.getPublished_at())
+                .last_update(bv.getLast_update())
+                .lock(bv.isLock())
+                .fileSet(bv.getFileSet())
+                .phongSet(bv.getPhongSet())
+                .countLikes(countLikes)
+                .countComments(countComments)
+                .build();
+    }
+    public BaiVietDTO convertToBaiVietDTO(BaiViet bv, User user) {
+        int countLikes = userRepository.countLikesByIdBaiViet(bv.getIdBaiViet());
+        int countComments = binhLuanRepository.countCommentsByIdBaiViet(bv.getIdBaiViet());
+        return BaiVietDTO.builder()
+                .idBaiViet(bv.getIdBaiViet())
+                .user(null)
                 .description(bv.getDescription())
                 .published_at(bv.getPublished_at())
                 .last_update(bv.getLast_update())

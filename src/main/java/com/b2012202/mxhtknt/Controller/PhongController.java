@@ -22,5 +22,11 @@ public class PhongController {
     public ResponseEntity<ResponseObject>getPhongById(@PathVariable Long idPhong){
         return ResponseEntity.ok(phongService.getPhongByID(idPhong));
     }
+    @PutMapping("/update/{idPhong}")
+    public ResponseEntity<ResponseObject>updateTinhTrang(@PathVariable Long idPhong){
+        return ResponseEntity.ok(phongService.updateTinhTrang(idPhong));
+    }
+
+
 
 }

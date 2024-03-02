@@ -13,4 +13,8 @@ public interface NhaTroService {
     ResponseObject findByTenNhaTro(String tenNhaTro, int page, int size);
 
     ResponseObject findNhaTroByAbsoluteAddress(String tenDuong, String tenXa, String tenHuyen, String tenTinh, int page, int size);
+
+    ResponseObject findNhaTroById();
+
+    ResponseObject getNhaTroByIdNhaTro(Long idNhaTro);
 }

@@ -47,8 +47,17 @@ public class BinhLuanServiceImpl implements BinhLuanService {
                     .noiDung(binhLuanRequest.getNoiDung())
                     .thoiGianBL(LocalDateTime.now())
                     .build();
-
-            return new ResponseObject("ok","create comment successfully", binhLuanRepository.save(binhLuan));
+            binhLuanRepository.save(binhLuan);
+            int countComments= binhLuanRepository.countCommentsByIdBaiViet(existBaiViet.getIdBaiViet());
+            BinhLuanDTO binhLuanDTO= BinhLuanDTO.builder()
+                    .idBL(binhLuan.getIdBL())
+                    .idBaiViet(binhLuan.getBaiViet().getIdBaiViet())
+                    .user(binhLuan.getUser())
+                    .noiDung(binhLuan.getNoiDung())
+                    .thoiGianBL(binhLuan.getThoiGianBL())
+                    .countComments(countComments)
+                    .build();
+            return new ResponseObject("ok","create comment successfully", binhLuanDTO);
         }catch (Exception ex){
             return new ResponseObject("failed", ex.getMessage(), null);
         }
@@ -99,8 +108,10 @@ public class BinhLuanServiceImpl implements BinhLuanService {
             if(existBinhLuan==null){
                 return new ResponseObject("failed","id of comment invalid", null);
             }
+            Long idBaiViet= existBinhLuan.getBaiViet().getIdBaiViet();
             binhLuanRepository.delete(existBinhLuan);
-            return new ResponseObject("ok","delete comment successfully", idBinhLuan);
+            int countComments= binhLuanRepository.countCommentsByIdBaiViet(idBaiViet);
+            return new ResponseObject("ok","delete comment successfully", countComments);
         }catch (Exception ex){
             return new ResponseObject("failed", ex.getMessage(), null);
         }

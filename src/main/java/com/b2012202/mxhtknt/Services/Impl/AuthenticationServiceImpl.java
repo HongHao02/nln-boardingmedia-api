@@ -1,14 +1,13 @@
 package com.b2012202.mxhtknt.Services.Impl;
 
 import com.b2012202.mxhtknt.Controller.FileController;
-import com.b2012202.mxhtknt.Models.BaiViet;
-import com.b2012202.mxhtknt.Repositories.BaiVietRepository;
-import com.b2012202.mxhtknt.Repositories.UserRepository;
+import com.b2012202.mxhtknt.DTO.BaiVietDTO;
+import com.b2012202.mxhtknt.DTO.NhaTroDTO;
+import com.b2012202.mxhtknt.DTO.UserInfoDTO;
+import com.b2012202.mxhtknt.Models.*;
+import com.b2012202.mxhtknt.Repositories.*;
 import com.b2012202.mxhtknt.Request.*;
-import com.b2012202.mxhtknt.Models.Role;
-import com.b2012202.mxhtknt.Models.User;
 import com.b2012202.mxhtknt.Services.*;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,6 +32,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final JWTService jwtService;
     private final IStorageService iStorageService;
     private final BaiVietRepository baiVietRepository;
+    private final NhaTroRepository nhaTroRepository;
+    private final PhongRepository phongRepository;
+    private final BaiVietServiceImpl baiVietServiceImpl;
 
     @Override
     public ResponseObject login(LoginRequest loginRequest) {
@@ -161,9 +163,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 Path filePath = paths[0];
                 String urlPath = MvcUriComponentsBuilder.fromMethodName(FileController.class,
                         "readDetailFile", filePath.getFileName().toString()).build().toUri().toString();
-//                            String baseUrl = "http://localhost:8080/api/v1/public/";
-//                            String filename = filePath.getFileName().toString();
-//                            String urlPath = baseUrl + "chutro/baiviet/" + filename;
                 System.out.println("~~~>fileURL: " + urlPath);
                 if (Objects.equals(urlPath, "")) {
                     return new ResponseObject("failed", "Failed to generate file path", null);
@@ -188,8 +187,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             if (existBaiViet == null) {
                 return new ResponseObject("failed", "Bai viet invalid", null);
             }
+            int countLikesBefore= userRepository.countLikesByIdBaiViet(existBaiViet.getIdBaiViet());
+            System.out.println("~~~>Like count before " + countLikesBefore);
             existUser.getLikedBaiVietSet().add(existBaiViet);
-            return new ResponseObject("ok", "Like post successfully", userService.saveUser(existUser));
+            userService.saveUser(existUser);
+            int countLikes= userRepository.countLikesByIdBaiViet(existBaiViet.getIdBaiViet());
+            System.out.println("~~~>Like count after " + countLikes);
+            return new ResponseObject("ok", "Like post successfully", countLikes);
         } catch (Exception ex) {
             return new ResponseObject("failed", ex.getMessage(), null);
         }
@@ -208,7 +212,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 return new ResponseObject("failed", "Bai viet invalid", null);
             }
             existUser.getLikedBaiVietSet().removeIf(baiViet -> baiViet.getIdBaiViet().equals(existBaiViet.getIdBaiViet()));
-            return new ResponseObject("ok", "Unlike post successfully", userService.saveUser(existUser));
+            userService.saveUser(existUser);
+            int countLikes= userRepository.countLikesByIdBaiViet(existBaiViet.getIdBaiViet());
+            System.out.println("~~~>Like count before " + countLikes);
+            return new ResponseObject("ok", "Unlike post successfully", countLikes);
         } catch (Exception ex) {
             return new ResponseObject("failed", ex.getMessage(), null);
         }
@@ -229,4 +236,59 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             return new ResponseObject("failed", ex.getMessage(), null);
         }
     }
+
+    /**
+     * For refresh jwt token in the future
+     */
+    @Override
+    public ResponseObject refreshToken(String token) {
+        try{
+            return null;
+        }catch (Exception ex){
+            return new ResponseObject("failed", ex.getMessage(), null);
+        }
+    }
+
+    @Override
+    public ResponseObject getUserInfo(String username) {
+        try{
+            User existUser= userService.findUserByUsername(username);
+            if(existUser==null){
+                return new ResponseObject("failed", "username invalid", null);
+            }
+            List<NhaTro> nhaTroList= nhaTroRepository.findByUser_Id(existUser.getId());
+            System.out.println("~~~>NhatroList " + nhaTroList);
+            List<NhaTroDTO> nhaTroDTOList = new ArrayList<>();
+            for(NhaTro nt : nhaTroList){
+                List<Phong> phongList= phongRepository.findByPhongID_IdNhaTro(nt.getIdNhaTro());
+                System.out.println("~~~>PhongList "+ phongList);
+                NhaTroDTO nhaTroDTO= NhaTroDTO.builder()
+                        .id(nt.getUser().getId())
+                        .idNhaTro(nt.getIdNhaTro())
+                        .tenNhaTro(nt.getTenNhaTro())
+                        .tenDuong(nt.getTuyenDuong().getTenDuong())
+                        .tenXa(nt.getXa().getXaID().getTenXa())
+                        .tenHuyen(nt.getXa().getXaID().getTenHuyen())
+                        .tenTinh(nt.getXa().getXaID().getTenTinh())
+                        .lauSet(nt.getLauSet())
+                        .build();
+                nhaTroDTOList.add(nhaTroDTO);
+            }
+            List<BaiViet> baiVietList= baiVietRepository.findAllBy_User_Id(existUser.getId());
+            List<BaiVietDTO> baiVietDTOList = new ArrayList<>();
+            for (BaiViet bv : baiVietList) {
+                BaiVietDTO baiVietDTO = baiVietServiceImpl.convertToBaiVietDTO(bv,null);
+                baiVietDTOList.add(baiVietDTO);
+            }
+            UserInfoDTO userInfoDTO = UserInfoDTO.builder()
+                    .user(existUser)
+                    .boarding_houses(nhaTroDTOList)
+                    .posts(baiVietDTOList)
+                    .build();
+            return new ResponseObject("ok", "get all user information", userInfoDTO);
+        }catch (Exception ex){
+            return new ResponseObject("failed", ex.getMessage(), null);
+        }
+    }
+
 }

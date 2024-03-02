@@ -5,8 +5,10 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 @Entity
 @Table(name = "NHA_TRO", uniqueConstraints = {
@@ -54,8 +56,6 @@ public class NhaTro {
 
     @OneToMany(mappedBy = "nhaTro")
     @JsonManagedReference
-    private Set<Lau> lauSet= new HashSet<>();
-
-
-
+//    private Set<Lau> lauSet= new HashSet<>();
+    private Set<Lau> lauSet = new TreeSet<>(Comparator.comparingInt(Lau::getSttLau));
 }

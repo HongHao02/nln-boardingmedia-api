@@ -43,4 +43,17 @@ public class TinhConTroller {
             return ResponseEntity.internalServerError().body(new ResponseObject("failed","Forbidden",e.getMessage()));
         }
     }
+    @DeleteMapping("delete/{tenTinh}")
+    public ResponseEntity<ResponseObject> deleteTinh(@PathVariable String tenTinh){
+        try{
+            Tinh existTinh= tinhRepository.findById(tenTinh).orElse(null);
+            if(existTinh==null){
+                return ResponseEntity.badRequest().body(new ResponseObject("failed", "province invalid", null));
+            }
+            tinhRepository.delete(existTinh);
+            return ResponseEntity.ok().body(new ResponseObject("failed","delete province successfully" , null));
+        }catch (Exception ex){
+            return ResponseEntity.badRequest().body(new ResponseObject("failed", ex.getMessage(), null));
+        }
+    }
 }

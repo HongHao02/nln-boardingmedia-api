@@ -59,4 +59,18 @@ public class PhongServiceImpl implements PhongService {
     public ResponseObject getPhongByID(Long idPhong) {
         return new ResponseObject("ok","Find phong successfully", phongRepository.findByIDPhong(idPhong).orElse(null));
     }
+
+    @Override
+    public ResponseObject updateTinhTrang(Long idPhong) {
+        try{
+            Phong existPhong= phongRepository.findByPhongID_IdPhong(idPhong).orElse(null);
+            if(existPhong==null){
+                return new ResponseObject("failed", "room id invalid", null);
+            }
+            existPhong.setTinhTrang(!existPhong.isTinhTrang());
+            return new ResponseObject("ok","update status of room successfully", phongRepository.save(existPhong));
+        }catch (Exception ex){
+            return new ResponseObject("failed", ex.getMessage(), null);
+        }
+    }
 }

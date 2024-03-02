@@ -20,4 +20,8 @@ public interface AuthenticationService {
     ResponseObject unLikeBaiViet(Long idBaiViet);
 
     ResponseObject findLikeBaiVietByUsername();
+
+    ResponseObject refreshToken(String token);
+
+    ResponseObject getUserInfo(String username);
 }

@@ -27,5 +27,4 @@ public class BaiVietDTO {
     private Set<Phong> phongSet = new HashSet<>();
     private int countLikes;
     private int countComments;
-
 }

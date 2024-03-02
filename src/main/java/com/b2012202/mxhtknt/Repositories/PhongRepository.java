@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface PhongRepository extends JpaRepository<Phong, PhongID> {
@@ -17,4 +18,11 @@ public interface PhongRepository extends JpaRepository<Phong, PhongID> {
 
     @Query("SELECT p FROM Phong p WHERE p.phongID.idPhong= :idPhong")
     Optional<Phong> findByIDPhong(@Param("idPhong") Long idPhong);
+
+    List<Phong> findByPhongID_IdNhaTro(Long idNhaTro);
+
+    @Query("SELECT p FROM Phong p WHERE p.phongID = :id AND p.tinhTrang = true")
+    Optional<Phong> findById(@Param("id") PhongID id);
+
+    Optional<Phong>findByPhongID_IdPhong(Long idPhong);
 }

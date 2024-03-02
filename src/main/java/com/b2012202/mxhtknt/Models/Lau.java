@@ -5,6 +5,7 @@ import com.b2012202.mxhtknt.Services.LauService;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.*;
 import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
 
@@ -12,8 +13,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 @Entity
 @Table(name = "LAU")
@@ -23,7 +26,6 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Lau {
-
     @EmbeddedId
     private LauID lauID;
 
@@ -40,20 +42,19 @@ public class Lau {
 
     @OneToMany(mappedBy = "lau")
     @JsonManagedReference
-    private Set<Phong> phongSet= new HashSet<>();
+    private Set<Phong> phongSet= new TreeSet<>(Comparator.comparingInt(Phong::getSttPhong));
 
     //Generate lau_sequence for database
     // ADD this statement in sql script: CREATE SEQUENCE lau_sequence START WITH 1 INCREMENT BY 1;
-    @SequenceGenerator(
-            name = "lau_sequence",
-            sequenceName = "lau_sequence",
-            allocationSize = 1 //increment by 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "lau_sequence"
-    )
-    private Long sequenceValue;
-
+//    @SequenceGenerator(
+//            name = "lau_sequence",
+//            sequenceName = "lau_sequence",
+//            allocationSize = 1 //increment by 1
+//    )
+//    @GeneratedValue(
+//            strategy = GenerationType.SEQUENCE,
+//            generator = "lau_sequence"
+//    )
+//    private Long sequenceValue;
 
 }

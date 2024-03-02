@@ -3,12 +3,10 @@ package com.b2012202.mxhtknt.Controller;
 import com.b2012202.mxhtknt.Models.NhaTro;
 import com.b2012202.mxhtknt.Request.ResponseObject;
 import com.b2012202.mxhtknt.Repositories.BinhLuanRepository;
-import com.b2012202.mxhtknt.Services.BaiVietService;
-import com.b2012202.mxhtknt.Services.BinhLuanService;
-import com.b2012202.mxhtknt.Services.NhaTroService;
-import com.b2012202.mxhtknt.Services.TuVanService;
+import com.b2012202.mxhtknt.Services.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +19,16 @@ public class PublicController {
     private final TuVanService tuVanService;
     private final NhaTroService nhaTroService;
     private final BaiVietService baiVietService;
+    private final AuthenticationService authenticationService;
 
+    //For User
+    /**
+     * Get user info and posts, boarding houses
+     */
+    @GetMapping("/users/@{username}")
+    public ResponseEntity<ResponseObject> getUserInfo(@PathVariable String username){
+        return ResponseEntity.ok(authenticationService.getUserInfo(username));
+    }
     //Get all bai viet follow by number page
     /**?
      * Get post list by number page and size (number of elements)
@@ -91,5 +98,18 @@ public class PublicController {
         return ResponseEntity.ok(nhaTroService.findNhaTroByAbsoluteAddress(tenDuong, tenXa, tenHuyen, tenTinh, page, size));
     }
 
+    //Boarding house
+    /**
+     * Find boarding house by IdUser
+     * @param: id
+     */
+    @GetMapping("/nhatro/me")
+    public ResponseEntity<ResponseObject> findNhaTroById(){
+        return ResponseEntity.ok(nhaTroService.findNhaTroById());
+    }
+    @GetMapping("/nhatro/{idNhaTro}")
+    public ResponseEntity<ResponseObject> getNhaTroByIdNhaTro(@PathVariable Long idNhaTro){
+        return ResponseEntity.ok(nhaTroService.getNhaTroByIdNhaTro(idNhaTro));
+    }
 
 }

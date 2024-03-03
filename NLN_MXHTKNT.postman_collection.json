@@ -1,0 +1,1884 @@
+{
+	"info": {
+		"_postman_id": "328b3d03-c569-4ed3-a2dc-a53a8d9ce41e",
+		"name": "NLN_MXHTKNT",
+		"description": "SOURCE: `D:\\SCHOOL_YEAR\\YEAR_4\\HK2\\CT250_Nien luan nganh\\API\\mxhtknt`\n\nSQL SERVER: `NLN_MXHTKNT_API_V1 or NLN_MXHTKNT_API_V2`",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26793610",
+		"_collection_link": "https://crimson-station-697070.postman.co/workspace/NIEN-LUAN-NGANH~89b0bde1-ca9f-42ec-93db-4669ce4d4f4c/collection/26793610-328b3d03-c569-4ed3-a2dc-a53a8d9ce41e?action=share&source=collection_link&creator=26793610"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "signUp",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"honghaocp@gmail.com\",\r\n    \"password\": \"abc@123\",\r\n    \"role\": \"CHUTRO\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{JWT_DEMO}}/api/v1/auth/signup",
+							"host": [
+								"{{JWT_DEMO}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logIn",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"honghaocp@gmail.com\",\r\n    \"password\": \"abc@123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{JWT_DEMO}}/api/v1/auth/login",
+							"host": [
+								"{{JWT_DEMO}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "logIn_Eg1",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"khachthue1@gmail.com\",\r\n    \"password\": \"abc@12345\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{8080_ENDPOINT}}/api/v1/auth/login",
+									"host": [
+										"{{8080_ENDPOINT}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 24 Feb 2024 18:22:42 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"ok\",\n    \"message\": \"Login successfully\",\n    \"data\": {\n        \"user\": {\n            \"id\": 5,\n            \"username\": \"khachthue1@gmail.com\",\n            \"password\": \"$2a$10$07pi300U0lj2xqQKaliEbegWAYaitW24Lo7S42jWXMoPD996RxcYO\",\n            \"firstName\": \"Hồng Hảo\",\n            \"lastName\": \"Nguyễn Phan\",\n            \"numberPhone\": \"0345952196\",\n            \"gender\": true,\n            \"dateOfBirth\": \"2002-01-28T17:00:00.000+00:00\",\n            \"cccd\": \"089202009124\",\n            \"avt\": \"http://localhost:8080/api/v1/public/file/099e1918602046b3888eb12e535058fb.jpg\",\n            \"roles\": [\n                {\n                    \"idRole\": 4,\n                    \"nameRole\": \"USER\"\n                },\n                {\n                    \"idRole\": 3,\n                    \"nameRole\": \"KHACHTHUE\"\n                }\n            ],\n            \"likedBaiVietSet\": [],\n            \"enabled\": true,\n            \"authorities\": [\n                {\n                    \"authority\": \"ROLE_USER\"\n                },\n                {\n                    \"authority\": \"ROLE_KHACHTHUE\"\n                }\n            ],\n            \"accountNonLocked\": true,\n            \"accountNonExpired\": true,\n            \"credentialsNonExpired\": true\n        },\n        \"token\": \"eyJhbGciOiJIUzI1NiJ9.eyJpZCI6NSwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJPTEVfVVNFUiJ9LHsiYXV0aG9yaXR5IjoiUk9MRV9LSEFDSFRIVUUifV0sInN1YiI6ImtoYWNodGh1ZTFAZ21haWwuY29tIiwiaWF0IjoxNzA4Nzk4OTYyLCJleHAiOjE3MDg4MTA0ODJ9.qBRV2_yrT_svE8mTATHR2QtX2SAyp7Vq2SSNIRtdOd4\",\n        \"refreshToken\": \"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJraGFjaHRodWUxQGdtYWlsLmNvbSIsImlhdCI6MTcwODc5ODk2MiwiZXhwIjoxNzA5NDAzNzYyfQ._XM0GITq746iCahdyJVDwtEQYLgc9rfYVMSmUCdhVaA\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "findById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{JWT_DEMO}}/api/v1/auth/findUserById/1",
+							"host": [
+								"{{JWT_DEMO}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"findUserById",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Chutro",
+			"item": [
+				{
+					"name": "NhaTro",
+					"item": [
+						{
+							"name": "create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "tenNhaTro",
+											"value": "Nhà Trọ 249",
+											"type": "text"
+										},
+										{
+											"key": "tenDuong",
+											"value": "Mậu Thân",
+											"type": "text"
+										},
+										{
+											"key": "tenXa",
+											"value": "Xuân Khánh",
+											"type": "text"
+										},
+										{
+											"key": "tenHuyen",
+											"value": "Ninh Kiều",
+											"type": "text"
+										},
+										{
+											"key": "tenTinh",
+											"value": "TP.Cần Thơ",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{8080_ENDPOINT}}/api/v1/chutro/nhatro/create",
+									"host": [
+										"{{8080_ENDPOINT}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"chutro",
+										"nhatro",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getAllNhaTro",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "deleteNhaTro",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{8080_ENDPOINT}}/api/v1/chutro/nhatro/delete/6",
+									"host": [
+										"{{8080_ENDPOINT}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"chutro",
+										"nhatro",
+										"delete",
+										"6"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Lau",
+					"item": [
+						{
+							"name": "createLau",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "idNhaTro",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "sttLau",
+											"value": "0",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{8080_ENDPOINT}}/api/v1/chutro/lau/create",
+									"host": [
+										"{{8080_ENDPOINT}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"chutro",
+										"lau",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getAllLau",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{8080_ENDPOINT}}/api/v1/chutro/lau/getAll",
+									"host": [
+										"{{8080_ENDPOINT}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"chutro",
+										"lau",
+										"getAll"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "deleteLau",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{8080_ENDPOINT}}/api/v1/chutro/lau/delete/6/3",
+									"host": [
+										"{{8080_ENDPOINT}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"chutro",
+										"lau",
+										"delete",
+										"6",
+										"3"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "LoaiPhong",
+					"item": [
+						{
+							"name": "createLoaiPhong",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"tenLoai\": \"phong don\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{8080_ENDPOINT}}/api/v1/chutro/loaiphong/create",
+									"host": [
+										"{{8080_ENDPOINT}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"chutro",
+										"loaiphong",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getAllLoaiPhong",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Phong",
+					"item": [
+						{
+							"name": "createPhong",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "idNhaTro",
+											"value": "1",
+											"description": "id của nhà trọ",
+											"type": "text"
+										},
+										{
+											"key": "idLau",
+											"value": "3",
+											"description": "id của lầu không phải stt lầu",
+											"type": "text"
+										},
+										{
+											"key": "idLoai",
+											"value": "3",
+											"description": "id 1: \"phong don\"; id 2: \"phong doi\"; id 3: \"phong co gac\"",
+											"type": "text"
+										},
+										{
+											"key": "sttPhong",
+											"value": "1",
+											"description": "stt của phòng",
+											"type": "text"
+										},
+										{
+											"key": "giaPhong",
+											"value": "1500000",
+											"description": "giá phòng",
+											"type": "text"
+										},
+										{
+											"key": "tinhTrang",
+											"value": "true",
+											"description": "true: sẵn sàng để ở. false: chưa sẵn sàng",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{8080_ENDPOINT}}/api/v1/chutro/phongtro/create",
+									"host": [
+										"{{8080_ENDPOINT}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"chutro",
+										"phongtro",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getPhongByID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{8080_ENDPOINT}}/api/v1/chutro/phong/1",
+									"host": [
+										"{{8080_ENDPOINT}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"chutro",
+										"phong",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "updateTinhTrang",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{8080_ENDPOINT}}/api/v1/chutro/phongtro/update/2",
+									"host": [
+										"{{8080_ENDPOINT}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"chutro",
+										"phongtro",
+										"update",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "deletePhong",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{8080_ENDPOINT}}/api/v1/chutro/phongtro/delete/6",
+									"host": [
+										"{{8080_ENDPOINT}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"chutro",
+										"phongtro",
+										"delete",
+										"6"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "BaiViet",
+					"item": [
+						{
+							"name": "createBaiViet",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "idNhaTro",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "idLau",
+											"value": "3",
+											"type": "text"
+										},
+										{
+											"key": "idPhong",
+											"value": "2",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "Em con 1 phong don lan 2. sdt: 0345952196",
+											"type": "text"
+										},
+										{
+											"key": "lock",
+											"value": "true",
+											"type": "text"
+										},
+										{
+											"key": "files",
+											"type": "file",
+											"src": [
+												"/C:/Users/admin/Pictures/Saved Pictures/meo2.jpg",
+												"/C:/Users/admin/Pictures/Saved Pictures/meo6.jpg"
+											]
+										}
+									]
+								},
+								"url": {
+									"raw": "{{8080_ENDPOINT}}/api/v1/chutro/baiviet/create",
+									"host": [
+										"{{8080_ENDPOINT}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"chutro",
+										"baiviet",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getBaiVietByID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{8080_ENDPOINT}}/api/v1/chutro/baiviet/1",
+									"host": [
+										"{{8080_ENDPOINT}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"chutro",
+										"baiviet",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "deleteBaiViet",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{8080_ENDPOINT}}/api/v1/chutro/baiviet/delete/6",
+									"host": [
+										"{{8080_ENDPOINT}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"chutro",
+										"baiviet",
+										"delete",
+										"6"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "updateBaiViet",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{8080_ENDPOINT}}/api/v1/chutro/baiviet/update",
+									"host": [
+										"{{8080_ENDPOINT}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"chutro",
+										"baiviet",
+										"update"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "TuVan",
+					"item": [
+						{
+							"name": "updateViewed",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{8080_ENDPOINT}}/api/v1/chutro/tuvan/viewed/23",
+									"host": [
+										"{{8080_ENDPOINT}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"chutro",
+										"tuvan",
+										"viewed",
+										"23"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "sayHelloChuTro",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{8080_ENDPOINT}}/api/v1/chutro/sayHello",
+							"host": [
+								"{{8080_ENDPOINT}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"chutro",
+								"sayHello"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "sayHelloAdmin",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{JWT_DEMO}}/api/v1/admin/sayHello",
+							"host": [
+								"{{JWT_DEMO}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"sayHello"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "BinhLuan",
+					"item": [
+						{
+							"name": "createBinhLuan",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "idBaiViet",
+											"value": "7",
+											"type": "text"
+										},
+										{
+											"key": "noiDung",
+											"value": "Nhà trọ này đẹp quá",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{8080_ENDPOINT}}/api/v1/users/binhluan/create",
+									"host": [
+										"{{8080_ENDPOINT}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"binhluan",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getAllBinhLuan",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{8080_ENDPOINT}}/api/v1/users/binhluan/7/all",
+									"host": [
+										"{{8080_ENDPOINT}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"binhluan",
+										"7",
+										"all"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "findBLById",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{8080_ENDPOINT}}/api/v1/users/binhluan/findById/7",
+									"host": [
+										"{{8080_ENDPOINT}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"binhluan",
+										"findById",
+										"7"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "hello",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{8080_ENDPOINT}}/api/v1/users/binhluan/hello",
+									"host": [
+										"{{8080_ENDPOINT}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"binhluan",
+										"hello"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "deleteBinhLuan",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{8080_ENDPOINT}}/api/v1/users/binhluan/delete/56",
+									"host": [
+										"{{8080_ENDPOINT}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"binhluan",
+										"delete",
+										"56"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "updateBinhLuan",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Account",
+					"item": [
+						{
+							"name": "changePassword",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"password\": \"abc@12345\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{8080_ENDPOINT}}/api/v1/users/password",
+									"host": [
+										"{{8080_ENDPOINT}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"password"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "changeAvt",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/Users/admin/Pictures/Saved Pictures/meo3.jpg"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{8080_ENDPOINT}}/api/v1/users/avt",
+									"host": [
+										"{{8080_ENDPOINT}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"avt"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "changeInfo",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "firstName",
+											"value": "Hồng Hảo",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "Nguyễn Phan",
+											"type": "text"
+										},
+										{
+											"key": "numberPhone",
+											"value": "0345952196",
+											"type": "text"
+										},
+										{
+											"key": "gender",
+											"value": "true",
+											"type": "text"
+										},
+										{
+											"key": "dateOfBirth",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "cccd",
+											"value": "089202009124",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{8080_ENDPOINT}}/api/v1/users/info",
+									"host": [
+										"{{8080_ENDPOINT}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"info"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "changeInfo_Eg",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "firstName",
+													"value": "Hồng Hảo",
+													"type": "text"
+												},
+												{
+													"key": "lastName",
+													"value": "Nguyễn Phan",
+													"type": "text"
+												},
+												{
+													"key": "numberPhone",
+													"value": "0345952196",
+													"type": "text"
+												},
+												{
+													"key": "gender",
+													"value": "true",
+													"type": "text"
+												},
+												{
+													"key": "dateOfBirth",
+													"value": "2002-01-29",
+													"type": "text"
+												},
+												{
+													"key": "cccd",
+													"value": "089202009124",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{8080_ENDPOINT}}/api/v1/users/info",
+											"host": [
+												"{{8080_ENDPOINT}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"users",
+												"info"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Vary",
+											"value": "Origin"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Method"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Headers"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Sat, 24 Feb 2024 14:51:20 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"ok\",\n    \"message\": \"Change info successfully\",\n    \"data\": {\n        \"id\": 5,\n        \"username\": \"khachthue1@gmail.com\",\n        \"password\": \"$2a$10$07pi300U0lj2xqQKaliEbegWAYaitW24Lo7S42jWXMoPD996RxcYO\",\n        \"firstName\": \"Hồng Hảo\",\n        \"lastName\": \"Nguyễn Phan\",\n        \"numberPhone\": \"0345952196\",\n        \"gender\": true,\n        \"dateOfBirth\": \"2002-01-28T17:00:00.000+00:00\",\n        \"cccd\": \"089202009124\",\n        \"avt\": \"http://localhost:8080/api/v1/public/file/099e1918602046b3888eb12e535058fb.jpg\",\n        \"roles\": [\n            {\n                \"idRole\": 4,\n                \"nameRole\": \"USER\"\n            },\n            {\n                \"idRole\": 3,\n                \"nameRole\": \"KHACHTHUE\"\n            }\n        ],\n        \"enabled\": true,\n        \"authorities\": [\n            {\n                \"authority\": \"ROLE_USER\"\n            },\n            {\n                \"authority\": \"ROLE_KHACHTHUE\"\n            }\n        ],\n        \"accountNonExpired\": true,\n        \"credentialsNonExpired\": true,\n        \"accountNonLocked\": true\n    }\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Likes",
+					"item": [
+						{
+							"name": "likeBaiViet",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{8080_ENDPOINT}}/api/v1/users/8/like",
+									"host": [
+										"{{8080_ENDPOINT}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"8",
+										"like"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "unLikeBaiViet",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{8080_ENDPOINT}}/api/v1/users/8/unlike",
+									"host": [
+										"{{8080_ENDPOINT}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"8",
+										"unlike"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getAllLikeBaiViet",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{8080_ENDPOINT}}/api/v1/users/baiviet/like",
+									"host": [
+										"{{8080_ENDPOINT}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"baiviet",
+										"like"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "sayHelloUser",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{8080_ENDPOINT}}/api/v1/users/sayHello",
+							"host": [
+								"{{8080_ENDPOINT}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"sayHello"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Xa",
+			"item": [
+				{
+					"name": "getAllXa",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{8080_ENDPOINT}}/api/v1/posts/xa/getAll",
+							"host": [
+								"{{8080_ENDPOINT}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"posts",
+								"xa",
+								"getAll"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sayHello",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "createXa",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "tenXa",
+									"value": "Xuân Khánh",
+									"type": "text"
+								},
+								{
+									"key": "tenHuyen",
+									"value": "Ninh Kiều",
+									"type": "text"
+								},
+								{
+									"key": "tenTinh",
+									"value": "TP.Cần Thơ",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{8080_ENDPOINT}}/api/v1/public/xa/create",
+							"host": [
+								"{{8080_ENDPOINT}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"public",
+								"xa",
+								"create"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tinh",
+			"item": [
+				{
+					"name": "getAllTinh",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{8080_ENDPOINT}}/api/v1/public/tinh/getAll",
+							"host": [
+								"{{8080_ENDPOINT}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"public",
+								"tinh",
+								"getAll"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "tenTinh",
+									"value": "Ninh Thuận",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{8080_ENDPOINT}}/api/v1/public/tinh/create",
+							"host": [
+								"{{8080_ENDPOINT}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"public",
+								"tinh",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sayHello",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "deleteTinh",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{8080_ENDPOINT}}/api/v1/public/tinh/delete/Vĩnh Phúc",
+							"host": [
+								"{{8080_ENDPOINT}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"public",
+								"tinh",
+								"delete",
+								"Vĩnh Phúc"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Huyen",
+			"item": [
+				{
+					"name": "getAllHuyen",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{8080_ENDPOINT}}/api/v1/public/tinh/getAll",
+							"host": [
+								"{{8080_ENDPOINT}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"public",
+								"tinh",
+								"getAll"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "tenTinh",
+									"value": "Ninh Thuận",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{8080_ENDPOINT}}/api/v1/public/tinh/create",
+							"host": [
+								"{{8080_ENDPOINT}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"public",
+								"tinh",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sayHello",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TuyenDuong",
+			"item": [
+				{
+					"name": "getAllTuyenDuong",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{8080_ENDPOINT}}/api/v1/public/tuyenduong/getAll",
+							"host": [
+								"{{8080_ENDPOINT}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"public",
+								"tuyenduong",
+								"getAll"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addTDToXa",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "tenDuong",
+									"value": "3/2",
+									"type": "text"
+								},
+								{
+									"key": "tenXa",
+									"value": "Xuân Khánh",
+									"type": "text"
+								},
+								{
+									"key": "tenHuyen",
+									"value": "Ninh Kiều",
+									"type": "text"
+								},
+								{
+									"key": "tenTinh",
+									"value": "TP.Cần Thơ",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{8080_ENDPOINT}}/api/v1/public/tuyenduong/addTDToXa",
+							"host": [
+								"{{8080_ENDPOINT}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"public",
+								"tuyenduong",
+								"addTDToXa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "tenDuong",
+									"value": "Mậu Thân",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{8080_ENDPOINT}}/api/v1/admin/tuyenduong/create",
+							"host": [
+								"{{8080_ENDPOINT}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"tuyenduong",
+								"create"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PUBLIC",
+			"item": [
+				{
+					"name": "getAllBinhLuan",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{8080_ENDPOINT}}/api/v1/public/binhluan/6",
+							"host": [
+								"{{8080_ENDPOINT}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"public",
+								"binhluan",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "helloPublic",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{8080_ENDPOINT}}/api/v1/public/binhluan/hello",
+							"host": [
+								"{{8080_ENDPOINT}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"public",
+								"binhluan",
+								"hello"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllTuVanByIdChuTro",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{8080_ENDPOINT}}/api/v1/public/tuvan/1",
+							"host": [
+								"{{8080_ENDPOINT}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"public",
+								"tuvan",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findNhaTroByTen",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{8080_ENDPOINT}}/api/v1/public/nhatro?tenNhaTro=Nhà trọ&page=1&size",
+							"host": [
+								"{{8080_ENDPOINT}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"public",
+								"nhatro"
+							],
+							"query": [
+								{
+									"key": "tenNhaTro",
+									"value": "Nhà trọ"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findNhaTroByAbsoluteAddress",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{8080_ENDPOINT}}/api/v1/public/nhatro/find-absolute?tenDuong=Mậu Thân&tenXa=Xuân Khánh &tenHuyen=Ninh Kiều&tenTinh=TP.Cần Thơ&page=1&size=1",
+							"host": [
+								"{{8080_ENDPOINT}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"public",
+								"nhatro",
+								"find-absolute"
+							],
+							"query": [
+								{
+									"key": "tenDuong",
+									"value": "Mậu Thân",
+									"description": "tên đường"
+								},
+								{
+									"key": "tenXa",
+									"value": "Xuân Khánh ",
+									"description": "tên xã/thị trấn/phường"
+								},
+								{
+									"key": "tenHuyen",
+									"value": "Ninh Kiều",
+									"description": "tên Quận/Huyện"
+								},
+								{
+									"key": "tenTinh",
+									"value": "TP.Cần Thơ",
+									"description": "tên Tỉnh/Thành phố"
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"description": "vị trí của trang tìm kiếm: 0,1,2...."
+								},
+								{
+									"key": "size",
+									"value": "1",
+									"description": "kích thước trang tìm kiếm, số lượng phần tử của mỗi trang"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getBaiVietListFLPage",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{8080_ENDPOINT}}/api/v1/public/baiviet?page=0&size=2",
+							"host": [
+								"{{8080_ENDPOINT}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"public",
+								"baiviet"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getBaiVietById",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "getListTuVanByIdUser",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{8080_ENDPOINT}}/api/v1/public/tuvan/user/1",
+							"host": [
+								"{{8080_ENDPOINT}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"public",
+								"tuvan",
+								"user",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findNhaTroById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{8080_ENDPOINT}}/api/v1/public/nhatro/me",
+							"host": [
+								"{{8080_ENDPOINT}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"public",
+								"nhatro",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getNhaTroByIdNhaTro",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{8080_ENDPOINT}}/api/v1/public/nhatro/3",
+							"host": [
+								"{{8080_ENDPOINT}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"public",
+								"nhatro",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUserInfo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{8080_ENDPOINT}}/api/v1/public/users/@honghaocp@gmail.com",
+							"host": [
+								"{{8080_ENDPOINT}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"public",
+								"users",
+								"@honghaocp@gmail.com"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TuVan",
+			"item": [
+				{
+					"name": "createTuVan",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "idNhaTro",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "idLau",
+									"value": "3",
+									"type": "text"
+								},
+								{
+									"key": "idPhong",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "idBaiViet",
+									"value": "7",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{8080_ENDPOINT}}/api/v1/khachthue/tuvan/create",
+							"host": [
+								"{{8080_ENDPOINT}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"khachthue",
+								"tuvan",
+								"create"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

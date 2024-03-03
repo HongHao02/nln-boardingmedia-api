@@ -12,6 +12,7 @@ import com.b2012202.mxhtknt.Services.XaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -19,49 +20,75 @@ import java.util.List;
 public class XaServiceImpl implements XaService {
     private final XaRepository xaRepository;
     private final HuyenRepository huyenRepository;
+
     @Override
     public List<Xa> findAllXa() {
         try {
             return xaRepository.findAll();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return null;
         }
     }
 
     @Override
     public ResponseObject createXa(XaRequest xaRequest) {
-        XaID xaID= XaID.builder()
-                .tenXa(xaRequest.getTenXa())
-                .tenHuyen(xaRequest.getTenHuyen())
-                .tenTinh(xaRequest.getTenTinh())
-                .build();
-        HuyenID huyenID= HuyenID.builder()
-                .tenTinh(xaRequest.getTenTinh())
-                .tenHuyen(xaRequest.getTenHuyen())
-                .build();
+        try {
+            XaID xaID = XaID.builder()
+                    .tenXa(xaRequest.getTenXa())
+                    .tenHuyen(xaRequest.getTenHuyen())
+                    .tenTinh(xaRequest.getTenTinh())
+                    .build();
+            HuyenID huyenID = HuyenID.builder()
+                    .tenTinh(xaRequest.getTenTinh())
+                    .tenHuyen(xaRequest.getTenHuyen())
+                    .build();
 
-        Xa exitstXa = xaRepository.findById(xaID).orElse(null);
+            Xa exitstXa = xaRepository.findById(xaID).orElse(null);
 
-        if(exitstXa!=null){
-            return new ResponseObject("failed","Xa already exits","");
+            if (exitstXa != null) {
+                return new ResponseObject("failed", "Xa already exits", "");
+            }
+
+            Xa xa = Xa.builder()
+                    .xaID(new XaID())
+                    .huyen(new Huyen())
+                    .nhaTroSet(new HashSet<>())
+                    .tuyenDuongSet(new HashSet<>())
+                    .build();
+
+            Huyen huyen = huyenRepository.findById(huyenID).orElse(null);
+
+            if (huyen == null) {
+                return new ResponseObject("failed", "Huyen invalid", "");
+            }
+
+            xa.getXaID().setTenXa(xaRequest.getTenXa());
+            xa.setHuyen(huyen);
+
+            System.out.println("~~~>Xa " + xa.toString());
+
+            return new ResponseObject("ok", "Create Xa successfully", xaRepository.save(xa));
+        } catch (Exception ex) {
+            return new ResponseObject("failed", ex.getMessage(), null);
         }
+    }
 
-        Xa xa= Xa.builder()
-                .xaID(new XaID())
-                .huyen(new Huyen())
-                .build();
-
-        Huyen huyen= huyenRepository.findById(huyenID).orElse(null);
-
-        if(huyen == null){
-            return new ResponseObject("failed","Huyen invalid","");
+    @Override
+    public ResponseObject deleteXa(String tenTinh, String tenHuyen, String tenXa) {
+        try {
+            XaID xaID = XaID.builder()
+                    .tenTinh(tenTinh)
+                    .tenHuyen(tenHuyen)
+                    .tenXa(tenXa)
+                    .build();
+            Xa existXa = xaRepository.findById(xaID).orElse(null);
+            if (existXa == null) {
+                return new ResponseObject("failed", "commune invalid", null);
+            }
+            xaRepository.delete(existXa);
+            return new ResponseObject("ok", "delete commune successfully", xaID);
+        } catch (Exception ex) {
+            return new ResponseObject("failed", ex.getMessage(), null);
         }
-
-        xa.getXaID().setTenXa(xaRequest.getTenXa());
-        xa.setHuyen(huyen);
-
-        System.out.println("~~~>Xa "+ xa.toString());
-
-        return new ResponseObject("ok","Create Xa successfully",xaRepository.save(xa));
     }
 }

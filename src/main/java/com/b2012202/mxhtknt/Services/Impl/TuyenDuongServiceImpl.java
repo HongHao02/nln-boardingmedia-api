@@ -16,39 +16,64 @@ import org.springframework.stereotype.Service;
 public class TuyenDuongServiceImpl implements TuyenDuongService {
     private final TuyenDuongRepository tuyenDuongRepository;
     private final XaRepository xaRepository;
+
     @Override
     public ResponseObject createTuyenDuong(TuyenDuongRequest tuyenDuongRequest) {
-        TuyenDuong tuyenDuong= tuyenDuongRepository.findById(tuyenDuongRequest.getTenDuong()).orElse(null);
-        if(tuyenDuong!=null){
-            return new ResponseObject("failed","Tuyen duong already exits", tuyenDuong);
+        try {
+            TuyenDuong tuyenDuong = tuyenDuongRepository.findById(tuyenDuongRequest.getTenDuong()).orElse(null);
+            if (tuyenDuong != null) {
+                return new ResponseObject("failed", "Tuyen duong already exits", tuyenDuong);
+            }
+            TuyenDuong saveTuyenDuong = TuyenDuong.builder()
+                    .tenDuong(tuyenDuongRequest.getTenDuong())
+                    .build();
+            return new ResponseObject("ok", "Create TuyenDuong successfully", tuyenDuongRepository.save(saveTuyenDuong));
+        } catch (Exception ex) {
+            return new ResponseObject("failed", ex.getMessage(), null);
         }
-        TuyenDuong saveTuyenDuong= TuyenDuong.builder()
-                .tenDuong(tuyenDuongRequest.getTenDuong())
-                .build();
-        return new ResponseObject("ok","Create TuyenDuong successfully", tuyenDuongRepository.save(saveTuyenDuong));
     }
 
     @Override
     public ResponseObject getAllTuyenDuong() {
-        return new ResponseObject("ok","Get all TuyenDuong", tuyenDuongRepository.findAll());
+        try{
+            return new ResponseObject("ok", "Get all TuyenDuong", tuyenDuongRepository.findAll());
+        }catch (Exception ex){
+            return new ResponseObject("failed", ex.getMessage(), null);
+        }
     }
 
     @Override
     public ResponseObject addTuyenDuongToXa(TuyenDuongRequest tuyenDuongRequest) {
-        XaID xaID= XaID.builder()
-                .tenTinh(tuyenDuongRequest.getTenTinh())
-                .tenHuyen(tuyenDuongRequest.getTenHuyen())
-                .tenXa(tuyenDuongRequest.getTenXa())
-                .build();
+        try {
+            XaID xaID = XaID.builder()
+                    .tenTinh(tuyenDuongRequest.getTenTinh())
+                    .tenHuyen(tuyenDuongRequest.getTenHuyen())
+                    .tenXa(tuyenDuongRequest.getTenXa())
+                    .build();
 
-        Xa exitsXa= xaRepository.findById(xaID).orElse(null);
-        TuyenDuong exitsTuyenDuong= tuyenDuongRepository.findById(tuyenDuongRequest.getTenDuong()).orElse(null);
-        if(exitsXa!=null && exitsTuyenDuong!=null){
-            exitsXa.getTuyenDuongSet().add(exitsTuyenDuong);
-            return new ResponseObject("ok", "add tuyenduong to xa successfully",xaRepository.save(exitsXa));
+            Xa exitsXa = xaRepository.findById(xaID).orElse(null);
+            TuyenDuong exitsTuyenDuong = tuyenDuongRepository.findById(tuyenDuongRequest.getTenDuong()).orElse(null);
+            if (exitsXa != null && exitsTuyenDuong != null) {
+                exitsXa.getTuyenDuongSet().add(exitsTuyenDuong);
+                return new ResponseObject("ok", "add tuyenduong to xa successfully", xaRepository.save(exitsXa));
+            }
+            return new ResponseObject("failed", "info invalid", null);
+        } catch (Exception ex) {
+            return new ResponseObject("failed", ex.getMessage(), null);
         }
-        return new ResponseObject("failed", "info invalid","");
     }
 
-
+    @Override
+    public ResponseObject deleteTuyenDuong(String tenDuong) {
+        try {
+            TuyenDuong existTuyenDuong = tuyenDuongRepository.findById(tenDuong).orElse(null);
+            if (existTuyenDuong == null) {
+                return new ResponseObject("failed", "road invalid", null);
+            }
+            tuyenDuongRepository.delete(existTuyenDuong);
+            return new ResponseObject("ok", "delete road successfully", tenDuong);
+        } catch (Exception ex) {
+            return new ResponseObject("failed", ex.getMessage(), null);
+        }
+    }
 }

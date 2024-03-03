@@ -14,18 +14,22 @@ public class TuyenDuongConTroller {
     private final TuyenDuongService tuyenDuongService;
 
     @PostMapping("/create")
-    public ResponseEntity<ResponseObject> createTuyenDuong(@ModelAttribute TuyenDuongRequest tuyenDuongRequest){
+    public ResponseEntity<ResponseObject> createTuyenDuong(@ModelAttribute TuyenDuongRequest tuyenDuongRequest) {
         return ResponseEntity.ok(tuyenDuongService.createTuyenDuong(tuyenDuongRequest));
     }
+
     @GetMapping("/getAll")
-    public ResponseEntity<ResponseObject> createTuyenDuong(){
+    public ResponseEntity<ResponseObject> createTuyenDuong() {
         return ResponseEntity.ok(tuyenDuongService.getAllTuyenDuong());
     }
 
     @PutMapping("/addTDToXa")
-    public ResponseEntity<ResponseObject> addTuyenDuongToXa(@ModelAttribute TuyenDuongRequest tuyenDuongRequest){
+    public ResponseEntity<ResponseObject> addTuyenDuongToXa(@ModelAttribute TuyenDuongRequest tuyenDuongRequest) {
         return ResponseEntity.ok(tuyenDuongService.addTuyenDuongToXa(tuyenDuongRequest));
     }
 
-
+    @DeleteMapping("/delete/{tenDuong}")
+    public ResponseEntity<ResponseObject> deleteTuyenDuong(@PathVariable String tenDuong) {
+        return ResponseEntity.ok(tuyenDuongService.deleteTuyenDuong(tenDuong));
+    }
 }

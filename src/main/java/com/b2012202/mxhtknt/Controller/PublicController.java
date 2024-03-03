@@ -20,6 +20,7 @@ public class PublicController {
     private final NhaTroService nhaTroService;
     private final BaiVietService baiVietService;
     private final AuthenticationService authenticationService;
+    private final TinhService tinhService;
 
     //For User
     /**
@@ -110,6 +111,12 @@ public class PublicController {
     @GetMapping("/nhatro/{idNhaTro}")
     public ResponseEntity<ResponseObject> getNhaTroByIdNhaTro(@PathVariable Long idNhaTro){
         return ResponseEntity.ok(nhaTroService.getNhaTroByIdNhaTro(idNhaTro));
+    }
+
+    //For Address
+    @GetMapping("/address/getAll")
+    public ResponseEntity<ResponseObject> getAllAddress(){
+        return ResponseEntity.ok(tinhService.getAllAddress());
     }
 
 }

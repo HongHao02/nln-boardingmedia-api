@@ -10,4 +10,6 @@ public interface XaService {
     List<Xa> findAllXa();
 
     ResponseObject createXa(XaRequest xaRequest);
+
+    ResponseObject deleteXa(String tenTinh, String tenHuyen, String tenXa);
 }

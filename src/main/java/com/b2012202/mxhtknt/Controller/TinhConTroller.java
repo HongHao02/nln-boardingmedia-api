@@ -3,10 +3,13 @@ package com.b2012202.mxhtknt.Controller;
 import com.b2012202.mxhtknt.Request.ResponseObject;
 import com.b2012202.mxhtknt.Models.Tinh;
 import com.b2012202.mxhtknt.Repositories.TinhRepository;
+import com.b2012202.mxhtknt.Request.UpdateTinhRequest;
+import com.b2012202.mxhtknt.Services.TinhService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
 
 @RestController
@@ -15,6 +18,7 @@ import java.util.List;
 public class TinhConTroller {
 
     private final TinhRepository tinhRepository;
+    private final TinhService tinhService;
 
     @PostMapping("/create")
     public ResponseEntity<ResponseObject> createTinh(@ModelAttribute Tinh tinh) {
@@ -24,6 +28,7 @@ public class TinhConTroller {
         if (exitsTinh == null) {
             Tinh saveTinh = Tinh.builder()
                     .tenTinh(tinh.getTenTinh())
+                    .huyenSet(new HashSet<>())
                     .build();
             return ResponseEntity.ok(new ResponseObject("ok", "Create Tinh successfully", tinhRepository.save(saveTinh)
             ));
@@ -56,4 +61,11 @@ public class TinhConTroller {
             return ResponseEntity.badRequest().body(new ResponseObject("failed", ex.getMessage(), null));
         }
     }
+    /**
+     * Failed: identifier of an instance of com.b2012202.mxhtknt.Models.Tinh was altered from TP.Cần Thơ 1 to TP.Cần Thơ
+     */
+//    @PutMapping("/update")
+//    public ResponseEntity<ResponseObject> updateTenTinh(@ModelAttribute UpdateTinhRequest updateTinhRequest){
+//        return ResponseEntity.ok(tinhService.updateTenTinh(updateTinhRequest));
+//    }
 }

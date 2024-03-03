@@ -30,4 +30,9 @@ public class HuyenController {
             return ResponseEntity.internalServerError().body(new ResponseObject("failed","Forbidden",e.getMessage()));
         }
     }
+
+    @DeleteMapping("/delete/{tenTinh}/{tenHuyen}")
+    public ResponseEntity<ResponseObject> deleteHuyen(@PathVariable String tenTinh, @PathVariable String tenHuyen){
+        return ResponseEntity.ok(huyenService.deleteHuyen(tenTinh, tenHuyen));
+    }
 }

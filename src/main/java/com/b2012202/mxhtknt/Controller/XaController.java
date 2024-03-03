@@ -17,21 +17,26 @@ public class XaController {
     private final XaService xaService;
 
     @PostMapping("/create")
-    public ResponseEntity<ResponseObject> createXa (@ModelAttribute XaRequest xaRequest){
+    public ResponseEntity<ResponseObject> createXa(@ModelAttribute XaRequest xaRequest) {
         return ResponseEntity.ok(xaService.createXa(xaRequest));
     }
+
     @GetMapping("/getAll")
-    public ResponseEntity<List<Xa>> getAllXa(){
+    public ResponseEntity<List<Xa>> getAllXa() {
         return ResponseEntity.ok(xaService.findAllXa());
     }
 
+    @DeleteMapping("/delete/{tenTinh}/{tenHuyen}/{tenXa}")
+    public ResponseEntity<ResponseObject> deleteXa(@PathVariable String tenTinh, @PathVariable String tenHuyen, @PathVariable String tenXa) {
+        return ResponseEntity.ok(xaService.deleteXa(tenTinh, tenHuyen, tenXa));
+    }
 
     @GetMapping("/sayHello")
-    public ResponseEntity<ResponseObject> testSay(){
-        try{
+    public ResponseEntity<ResponseObject> testSay() {
+        try {
             return ResponseEntity.ok(new ResponseObject("ok", "Hello! This is Xa Hello", ""));
-        }catch (Exception e){
-            return ResponseEntity.internalServerError().body(new ResponseObject("failed","Forbidden",e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(new ResponseObject("failed", "Forbidden", e.getMessage()));
         }
     }
 }

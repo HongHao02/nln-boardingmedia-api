@@ -7,4 +7,6 @@ public interface HuyenService {
     ResponseObject createHuyen(HuyenRequest huyenRequest);
 
     ResponseObject getAllHuyen();
+
+    ResponseObject deleteHuyen(String tenTinh, String tenHuyen);
 }

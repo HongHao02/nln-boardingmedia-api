@@ -9,4 +9,6 @@ public interface TuyenDuongService {
     ResponseObject getAllTuyenDuong();
 
     ResponseObject addTuyenDuongToXa(TuyenDuongRequest tuyenDuongRequest);
+
+    ResponseObject deleteTuyenDuong(String tenDuong);
 }

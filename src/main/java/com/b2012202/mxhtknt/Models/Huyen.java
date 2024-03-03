@@ -33,7 +33,6 @@ public class Huyen {
     @JsonManagedReference
     private Set<Xa> xaSet= new HashSet<>();
 
-
     public String toString(){
         return "\"Huyen\" + Ten huyen: " + this.huyenID.getTenHuyen()
                 + "__Ten tinh from tinh attribute: "+ this.tinh.getTenTinh()

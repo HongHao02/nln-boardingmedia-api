@@ -28,7 +28,7 @@ public class Xa {
     @JsonBackReference
     private Huyen huyen;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "TUYENDUONG_XA",
             joinColumns = {

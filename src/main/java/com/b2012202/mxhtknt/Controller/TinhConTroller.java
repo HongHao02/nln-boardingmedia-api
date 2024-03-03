@@ -56,7 +56,7 @@ public class TinhConTroller {
                 return ResponseEntity.badRequest().body(new ResponseObject("failed", "province invalid", null));
             }
             tinhRepository.delete(existTinh);
-            return ResponseEntity.ok().body(new ResponseObject("failed","delete province successfully" , null));
+            return ResponseEntity.ok().body(new ResponseObject("ok","delete province successfully" , tenTinh));
         }catch (Exception ex){
             return ResponseEntity.badRequest().body(new ResponseObject("failed", ex.getMessage(), null));
         }

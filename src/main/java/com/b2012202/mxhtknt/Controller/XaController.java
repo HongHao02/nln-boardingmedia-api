@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/public/xa")
+@RequestMapping("/api/v1/admin/xa")
 @RequiredArgsConstructor
 public class XaController {
     private final XaService xaService;

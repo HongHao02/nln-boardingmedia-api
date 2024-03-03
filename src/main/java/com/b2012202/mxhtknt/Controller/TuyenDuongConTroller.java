@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/public/tuyenduong")
+@RequestMapping("/api/v1/admin/tuyenduong")
 @RequiredArgsConstructor
 public class TuyenDuongConTroller {
     private final TuyenDuongService tuyenDuongService;

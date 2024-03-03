@@ -19,7 +19,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -49,13 +52,14 @@ public class NhaTroServiceImpl implements NhaTroService {
                         .tenNhaTro(nhaTroRequest.getTenNhaTro())
                         .tuyenDuong(exitsTuyenDuong)
                         .xa(exitsXa)
+                        .deleted(false)
                         .user(exitsUser)
                         .build();
                 return new ResponseObject("ok", "Create NhaTro successfully", nhaTroRepository.save(nhaTro));
             }
-            return new ResponseObject("failed", "Create NhaTro failed", "");
+            return new ResponseObject("failed", "Create NhaTro failed", null);
         } catch (Exception ex) {
-            return new ResponseObject("FAILED: Name of Nha tro must different in the same Huyen of Tinh", ex.getMessage(), null);
+            return new ResponseObject("failed", ex.getMessage(), null);
         }
     }
 
@@ -78,20 +82,20 @@ public class NhaTroServiceImpl implements NhaTroService {
     public ResponseObject findNhaTroByAbsoluteAddress(String tenDuong, String tenXa, String tenHuyen, String tenTinh, int page, int size) {
         try {
             Pageable pageable = PageRequest.of(page, size);
-            if(tenDuong.isEmpty() || tenXa.isEmpty() || tenHuyen.isEmpty() || tenTinh.isEmpty()){
+            if (tenDuong.isEmpty() || tenXa.isEmpty() || tenHuyen.isEmpty() || tenTinh.isEmpty()) {
                 return new ResponseObject("failed", "The address must be not null", null);
             }
-            XaID xaID= XaID.builder()
+            XaID xaID = XaID.builder()
                     .tenXa(tenXa)
                     .tenHuyen(tenHuyen)
                     .tenTinh(tenTinh)
                     .build();
             Xa existXa = xaRepository.findById(xaID).orElse(null);
-            if(existXa==null){
+            if (existXa == null) {
                 return new ResponseObject("failed", "Address invalid", null);
             }
-            TuyenDuong existTuyenDuong= tuyenDuongRepository.findById(tenDuong).orElse(null);
-            if(existTuyenDuong==null || !existXa.getTuyenDuongSet().contains(existTuyenDuong)){
+            TuyenDuong existTuyenDuong = tuyenDuongRepository.findById(tenDuong).orElse(null);
+            if (existTuyenDuong == null || !existXa.getTuyenDuongSet().contains(existTuyenDuong)) {
                 return new ResponseObject("failed", "Ten duong invalid", null);
             }
             return new ResponseObject("ok", "Get list nha tro by absolute address", nhaTroRepository.findByAbsoluteAddress(tenDuong, tenXa, tenHuyen, tenTinh, pageable));
@@ -102,20 +106,33 @@ public class NhaTroServiceImpl implements NhaTroService {
 
     @Override
     public ResponseObject findNhaTroById() {
-        try{
+        try {
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
             User existUser = userService.findUserByUsername(username);
             if (existUser == null) {
                 return new ResponseObject("failed", "User info invalid", null);
             }
 
-            List<NhaTro> nhaTroList= nhaTroRepository.findByUser_Id(existUser.getId());
+            List<NhaTro> nhaTroList = nhaTroRepository.findByUser_Id(existUser.getId());
             System.out.println("~~~>NhatroList " + nhaTroList);
             List<NhaTroDTO> nhaTroDTOList = new ArrayList<>();
-            for(NhaTro nt : nhaTroList){
-                List<Phong> phongList= phongRepository.findByPhongID_IdNhaTro(nt.getIdNhaTro());
-                System.out.println("~~~>PhongList "+ phongList);
-                NhaTroDTO nhaTroDTO= NhaTroDTO.builder()
+            for (NhaTro nt : nhaTroList) {
+                List<Phong> phongList = phongRepository.findByPhongID_IdNhaTro(nt.getIdNhaTro());
+                System.out.println("~~~>PhongList " + phongList);
+                Set<Lau> existLauSet = nt.getLauSet();
+                Set<Lau> notDeletedlau= existLauSet.stream()
+                        .filter(lau -> !lau.getDeleted())
+                        .collect(Collectors.toSet());
+
+                Set<Lau> lauContainPhongNotDeleted = new HashSet<>(notDeletedlau);
+                for(Lau lau : notDeletedlau){
+                    Set<Phong> notDeletePhongSet= lau.getPhongSet().stream()
+                            .filter(phong -> !phong.getDeleted())
+                            .collect(Collectors.toSet());
+                    lau.setPhongSet(notDeletePhongSet);
+                    lauContainPhongNotDeleted.add(lau);
+                }
+                        NhaTroDTO nhaTroDTO = NhaTroDTO.builder()
                         .id(nt.getUser().getId())
                         .idNhaTro(nt.getIdNhaTro())
                         .tenNhaTro(nt.getTenNhaTro())
@@ -123,24 +140,37 @@ public class NhaTroServiceImpl implements NhaTroService {
                         .tenXa(nt.getXa().getXaID().getTenXa())
                         .tenHuyen(nt.getXa().getXaID().getTenHuyen())
                         .tenTinh(nt.getXa().getXaID().getTenTinh())
-                        .lauSet(nt.getLauSet())
+                        .lauSet(lauContainPhongNotDeleted)
                         .build();
                 nhaTroDTOList.add(nhaTroDTO);
             }
             return new ResponseObject("ok", "Get nha tro by id User successfully", nhaTroDTOList);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return new ResponseObject("failed", ex.getMessage(), null);
         }
     }
 
     @Override
     public ResponseObject getNhaTroByIdNhaTro(Long idNhaTro) {
-        try{
-            NhaTro eixisNhaTro= nhaTroRepository.findById(idNhaTro).orElse(null);
-            if(eixisNhaTro==null){
-                return new ResponseObject("failed","idNhaTro invalid",null);
+        try {
+            NhaTro eixisNhaTro = nhaTroRepository.findById(idNhaTro).orElse(null);
+            if (eixisNhaTro == null) {
+                return new ResponseObject("failed", "idNhaTro invalid", null);
             }
-            NhaTroDTO nhaTroDTO= NhaTroDTO.builder()
+            Set<Lau> existLauSet = eixisNhaTro.getLauSet();
+            // Sử dụng Java Stream API để lọc và tạo ra một Set mới chỉ chứa các phần tử có Lau.deleted = false
+            Set<Lau> notDeletedlau= existLauSet.stream()
+                    .filter(lau -> !lau.getDeleted()) // Lọc các phần tử có lau.deleted = false
+                    .collect(Collectors.toSet()); // Thu thập kết quả vào một Set mới
+            Set<Lau> lauContainPhongNotDeleted = new HashSet<>(notDeletedlau);
+            for(Lau lau : notDeletedlau){
+                Set<Phong> notDeletePhongSet= lau.getPhongSet().stream()
+                        .filter(phong -> !phong.getDeleted())
+                        .collect(Collectors.toSet());
+                lau.setPhongSet(notDeletePhongSet);
+                lauContainPhongNotDeleted.add(lau);
+            }
+            NhaTroDTO nhaTroDTO = NhaTroDTO.builder()
                     .id(eixisNhaTro.getUser().getId())
                     .idNhaTro(eixisNhaTro.getIdNhaTro())
                     .tenNhaTro(eixisNhaTro.getTenNhaTro())
@@ -148,10 +178,34 @@ public class NhaTroServiceImpl implements NhaTroService {
                     .tenXa(eixisNhaTro.getXa().getXaID().getTenXa())
                     .tenHuyen(eixisNhaTro.getXa().getXaID().getTenHuyen())
                     .tenTinh(eixisNhaTro.getXa().getXaID().getTenTinh())
-                    .lauSet(eixisNhaTro.getLauSet())
+                    .lauSet(lauContainPhongNotDeleted)
                     .build();
             return new ResponseObject("ok", "get nha tro by idNhaTro successfully", nhaTroDTO);
-        }catch (Exception ex){
+        } catch (Exception ex) {
+            return new ResponseObject("failed", ex.getMessage(), null);
+        }
+    }
+
+    @Override
+    public ResponseObject deleteNhaTro(Long idNhaTro) {
+        try {
+            NhaTro existNhaTro = nhaTroRepository.findById(idNhaTro).orElse(null);
+            if (existNhaTro == null) {
+                return new ResponseObject("failed", "idNhaTro invalid", null);
+            }
+            existNhaTro.setDeleted(true);
+            for(Lau lau: existNhaTro.getLauSet()){
+                lau.setDeleted(true);
+                for(Phong phong : lau.getPhongSet()){
+                    phong.setDeleted(true);
+                    for(BaiViet bv: phong.getBaiVietSet()){
+                        bv.setDeleted(true);
+                    }
+                }
+            }
+            nhaTroRepository.save(existNhaTro);
+            return new ResponseObject("ok", "delete boarding house successfully", idNhaTro);
+        } catch (Exception ex) {
             return new ResponseObject("failed", ex.getMessage(), null);
         }
     }

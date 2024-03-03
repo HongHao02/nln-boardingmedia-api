@@ -8,16 +8,18 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface NhaTroRepository extends JpaRepository<NhaTro, Long> {
-    @Query("SELECT n FROM NhaTro n WHERE n.tenNhaTro LIKE %:tenNhaTro%")
+    @Query("SELECT n FROM NhaTro n WHERE n.tenNhaTro LIKE %:tenNhaTro% AND n.deleted = false")
     Page<NhaTro> findByTenContaining(@Param("tenNhaTro") String ten, Pageable pageable);
 
     @Query("SELECT nt FROM NhaTro nt " +
             "WHERE nt.tuyenDuong.tenDuong = :tenDuong " +
             "AND nt.xa.xaID.tenXa = :tenXa " +
             "AND nt.xa.xaID.tenHuyen = :tenHuyen " +
-            "AND nt.xa.xaID.tenTinh = :tenTinh")
+            "AND nt.xa.xaID.tenTinh = :tenTinh " +
+            "AND nt.deleted = false ")
     Page<NhaTro> findByAbsoluteAddress(
             @Param("tenDuong") String tenDuong,
             @Param("tenXa") String tenXa,
@@ -26,6 +28,11 @@ public interface NhaTroRepository extends JpaRepository<NhaTro, Long> {
             Pageable pageable
     );
 
+    @Query("SELECT n FROM NhaTro n WHERE n.user.id=:id AND  n.deleted = false")
     List<NhaTro> findByUser_Id(Long id);
+    @Query("SELECT nt FROM NhaTro nt WHERE nt.idNhaTro=:idNhaTro AND nt.deleted = false")
+    Optional<NhaTro>findById(@Param("idNhaTro") Long idNhaTro);
+    @Query("SELECT nt FROM NhaTro nt WHERE nt.deleted = false")
+    List<NhaTro>findAll();
 
 }

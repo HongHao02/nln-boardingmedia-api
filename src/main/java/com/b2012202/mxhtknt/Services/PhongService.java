@@ -9,4 +9,6 @@ public interface PhongService {
     ResponseObject getPhongByID(Long idPhong);
 
     ResponseObject updateTinhTrang(Long idPhong);
+
+    ResponseObject deletePhong(Long idPhong);
 }

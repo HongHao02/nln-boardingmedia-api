@@ -13,4 +13,6 @@ public interface LauService {
     List<Lau> getAllLau();
 
     Long getNextSequenceValue();
+
+    ResponseObject deleteLau(Long idNhaTro, Long idLau);
 }

@@ -26,6 +26,11 @@ public class PhongController {
     public ResponseEntity<ResponseObject>updateTinhTrang(@PathVariable Long idPhong){
         return ResponseEntity.ok(phongService.updateTinhTrang(idPhong));
     }
+    @PutMapping("/delete/{idPhong}")
+    public ResponseEntity<ResponseObject>deletePhong(@PathVariable Long idPhong){
+        return ResponseEntity.ok(phongService.deletePhong(idPhong));
+    }
+
 
 
 

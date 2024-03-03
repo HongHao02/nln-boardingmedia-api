@@ -13,16 +13,18 @@ public interface PhongRepository extends JpaRepository<Phong, PhongID> {
     @Query(value = "SELECT NEXT VALUE FOR phong_sequence", nativeQuery = true)
     Long getNextSequenceValue();
 
-    @Query("SELECT p FROM Phong p WHERE p.sttPhong = :sttPhong AND p.phongID.idNhaTro = :idNhaTro AND p.phongID.idLau = :idLau")
+    @Query("SELECT p FROM Phong p WHERE p.sttPhong = :sttPhong AND p.phongID.idNhaTro = :idNhaTro AND p.phongID.idLau = :idLau AND p.deleted = false AND p.lau.deleted= false AND p.lau.nhaTro.deleted=false")
     Optional<Phong> findByIDNhaTroAndIdLauAndSTTPhong(@Param("idNhaTro") Long idNhaTro, @Param("idLau") Long idLau,@Param("sttPhong") Integer sttPhong);
 
-    @Query("SELECT p FROM Phong p WHERE p.phongID.idPhong= :idPhong")
+    @Query("SELECT p FROM Phong p WHERE p.phongID.idPhong= :idPhong AND p.deleted=false AND p.lau.deleted= false AND p.lau.nhaTro.deleted=false")
     Optional<Phong> findByIDPhong(@Param("idPhong") Long idPhong);
 
+    @Query("SELECT p FROM Phong p WHERE p.phongID.idNhaTro = :idNhaTro AND p.deleted = false AND p.lau.deleted=false AND p.lau.nhaTro.deleted=false")
     List<Phong> findByPhongID_IdNhaTro(Long idNhaTro);
 
-    @Query("SELECT p FROM Phong p WHERE p.phongID = :id AND p.tinhTrang = true")
+    @Query("SELECT p FROM Phong p WHERE p.phongID = :id AND p.tinhTrang = true and p.deleted=false AND p.lau.deleted= false AND p.lau.nhaTro.deleted=false")
     Optional<Phong> findById(@Param("id") PhongID id);
 
+    @Query("SELECT p FROM Phong p WHERE p.phongID.idPhong = :idPhong AND p.deleted = false AND p.lau.deleted=false AND p.lau.nhaTro.deleted=false")
     Optional<Phong>findByPhongID_IdPhong(Long idPhong);
 }

@@ -22,5 +22,9 @@ public class NhaTroController {
         return ResponseEntity.ok(nhaTroService.getAllNhaTro());
     }
 
+    @PutMapping("/delete/{idNhaTro}")
+    public ResponseEntity<ResponseObject>deleteNhaTro(@PathVariable Long idNhaTro){
+        return ResponseEntity.ok(nhaTroService.deleteNhaTro(idNhaTro));
+    }
 
 }

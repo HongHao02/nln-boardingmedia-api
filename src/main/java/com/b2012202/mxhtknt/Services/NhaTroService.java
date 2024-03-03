@@ -17,4 +17,6 @@ public interface NhaTroService {
     ResponseObject findNhaTroById();
 
     ResponseObject getNhaTroByIdNhaTro(Long idNhaTro);
+
+    ResponseObject deleteNhaTro(Long idNhaTro);
 }

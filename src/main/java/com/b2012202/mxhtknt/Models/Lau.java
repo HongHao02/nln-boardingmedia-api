@@ -32,6 +32,8 @@ public class Lau {
     @Column(name = "STTLAU")
     private Integer sttLau;
 
+
+
     @MapsId("idNhaTro")
     @ManyToOne
     @JoinColumn(name = "IDNHATRO")
@@ -39,6 +41,8 @@ public class Lau {
     @JsonBackReference
     private NhaTro nhaTro;
 
+    @Column(name = "DELETED")
+    private Boolean deleted = false;
 
     @OneToMany(mappedBy = "lau")
     @JsonManagedReference

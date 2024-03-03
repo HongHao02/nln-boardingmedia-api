@@ -235,6 +235,7 @@ public class BaiVietServiceImpl implements BaiVietService {
                 .phongSet(bv.getPhongSet())
                 .countLikes(countLikes)
                 .countComments(countComments)
+                .deleted(bv.isDeleted())
                 .build();
     }
     public BaiVietDTO convertToBaiVietDTO(BaiViet bv, User user) {
@@ -251,6 +252,7 @@ public class BaiVietServiceImpl implements BaiVietService {
                 .phongSet(bv.getPhongSet())
                 .countLikes(countLikes)
                 .countComments(countComments)
+                .deleted(bv.isDeleted())
                 .build();
     }
 }

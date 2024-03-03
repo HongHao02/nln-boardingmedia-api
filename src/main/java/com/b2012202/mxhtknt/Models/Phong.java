@@ -58,10 +58,12 @@ public class Phong {
     @JsonBackReference
     private Set<BaiViet> baiVietSet = new HashSet<>();
 
-    @OneToMany(mappedBy = "phong")
+    @OneToMany(mappedBy = "phong", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<ChiTietTuVan> chiTietTuVanSet= new HashSet<>();
 
+    @Column(name = "DELETED")
+    private Boolean deleted = false;
 //    @ManyToMany(mappedBy = "phongTVSet", fetch = FetchType.LAZY)
 //    @JsonBackReference
 //    private Set<TuVan> tuVanSet= new HashSet<>();

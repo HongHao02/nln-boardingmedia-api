@@ -25,7 +25,6 @@ import java.io.PrintWriter;
 @RequiredArgsConstructor
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
     private final JWTService jwtService;
-
     private final UserService userService;
 
     @Override

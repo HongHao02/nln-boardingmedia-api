@@ -36,6 +36,9 @@ public class NhaTro {
     @Column(name = "TENNHATRO")
     private String tenNhaTro;
 
+    @Column(name = "DELETED")
+    private Boolean deleted = false;
+
     @ManyToOne
     @JoinColumn(name = "TENDUONG", referencedColumnName = "TENDUONG")
     @JsonManagedReference

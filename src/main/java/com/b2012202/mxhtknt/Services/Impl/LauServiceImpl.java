@@ -13,7 +13,9 @@ import com.b2012202.mxhtknt.Services.LauService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.TreeSet;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +37,7 @@ public class LauServiceImpl implements LauService {
                     .nhaTro(nhaTroExits)
                     .deleted(false)
                     .sttLau(lauRequest.getSttLau())
+                    .phongSet(new TreeSet<>(Comparator.comparingInt(Phong::getSttPhong)))
                     .build();
 
             lau.getLauID().setIdLau(getNextSequenceValue());

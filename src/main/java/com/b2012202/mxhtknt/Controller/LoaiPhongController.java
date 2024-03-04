@@ -1,5 +1,6 @@
 package com.b2012202.mxhtknt.Controller;
 
+import com.b2012202.mxhtknt.Request.LoaiPhongRequest;
 import com.b2012202.mxhtknt.Request.ResponseObject;
 import com.b2012202.mxhtknt.Models.LoaiPhong;
 import com.b2012202.mxhtknt.Repositories.LoaiPhongRepository;
@@ -7,19 +8,33 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
+
 @RestController
 @RequestMapping("/api/v1/chutro/loaiphong")
 @RequiredArgsConstructor
 public class LoaiPhongController {
     private final LoaiPhongRepository loaiPhongRepository;
 
-    @PostMapping("/create")
-    public ResponseEntity<ResponseObject> createLoaiPhong(@RequestBody LoaiPhong loaiPhong){
-        LoaiPhong exitsLoaiPhong= loaiPhongRepository.findByTenLoai(loaiPhong.getTenLoai()).orElse(null);
-        if(exitsLoaiPhong!=null){
-            return ResponseEntity.ok(new ResponseObject("failed","Loai phong already exits",null));
+    @PostMapping("/createLP")
+    public ResponseEntity<ResponseObject> createLP(@ModelAttribute LoaiPhongRequest loaiPhongRequest){
+        try{
+            LoaiPhong existLP = loaiPhongRepository.findByTenLoai(loaiPhongRequest.getTenLoai()).orElse(null);
+            if(existLP != null){
+                return ResponseEntity.ok(new ResponseObject("failed","tenLoai already in use", null));
+            }
+            LoaiPhong loaiPhong= LoaiPhong.builder()
+                    .tenLoai(loaiPhongRequest.getTenLoai())
+                    .phongSet(new HashSet<>())
+                    .build();
+            return ResponseEntity.ok(new ResponseObject("ok","create loaiPhong successfully", loaiPhongRepository.save(loaiPhong)));
+        }catch (Exception ex){
+            return ResponseEntity.ok(new ResponseObject("failed", ex.getMessage(), null));
         }
-        return ResponseEntity.ok(new ResponseObject("ok","Create loai phong successfully",loaiPhongRepository.save(loaiPhong)));
+    }
+    @GetMapping("/hello")
+    public ResponseEntity<String> hello(){
+        return ResponseEntity.ok("Hello");
     }
 
     @GetMapping("getAll")

@@ -54,10 +54,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                                 .user(user)
                                 .build());
             } else {
-                return new ResponseObject("Failed", "Username or password invalid", "");
+                return new ResponseObject("Failed", "Username or password invalid", null);
             }
         } catch (Exception e) {
-            return new ResponseObject("Failed", "Username or password invalid", "");
+            return new ResponseObject("Failed", "Username or password invalid", null);
         }
     }
 
@@ -65,7 +65,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public ResponseObject signUp(SignUpRequest signUpRequest) {
         User exitsUser = userService.findUserByUsername(signUpRequest.getUsername());
         if (exitsUser != null) {
-            return new ResponseObject("Failed", "Username already used", "");
+            return new ResponseObject("Failed", "Username already used", null);
         } else {
             User user = User.builder()
                     .username(signUpRequest.getUsername())
@@ -79,7 +79,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             if (signUpRole != null) {
                 user.getRoles().add(signUpRole);
             } else {
-                return new ResponseObject("Failed", "role not fond", "");
+                return new ResponseObject("Failed", "role not fond", null);
             }
             return new ResponseObject("ok", "Create User Successfully", userService.saveUser(user));
         }

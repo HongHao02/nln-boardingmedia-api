@@ -18,10 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,6 +51,7 @@ public class NhaTroServiceImpl implements NhaTroService {
                         .xa(exitsXa)
                         .deleted(false)
                         .user(exitsUser)
+                        .lauSet(new TreeSet<>(Comparator.comparingInt(Lau::getSttLau)))
                         .build();
                 return new ResponseObject("ok", "Create NhaTro successfully", nhaTroRepository.save(nhaTro));
             }

@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class BinhLuanServiceImpl implements BinhLuanService {
                     .baiViet(existBaiViet)
                     .user(existUser)
                     .noiDung(binhLuanRequest.getNoiDung())
-                    .thoiGianBL(LocalDateTime.now())
+                    .thoiGianBL(LocalDateTime.now(ZoneId.systemDefault()))
                     .build();
             binhLuanRepository.save(binhLuan);
             int countComments= binhLuanRepository.countCommentsByIdBaiViet(existBaiViet.getIdBaiViet());

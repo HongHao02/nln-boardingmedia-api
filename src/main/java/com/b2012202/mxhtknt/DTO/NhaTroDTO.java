@@ -14,6 +14,7 @@ import java.util.Set;
 @Builder
 public class NhaTroDTO {
     private Long id;
+    private String username;
     private long idNhaTro;
     private String tenNhaTro;
     private String tenDuong;

@@ -8,12 +8,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 public interface BaiVietRepository extends JpaRepository<BaiViet, Long> {
-    @Query("SELECT bv FROM BaiViet bv WHERE bv.deleted != true")
-    Page<BaiViet> findAll(Pageable pageable);
+    @Query("SELECT bv FROM BaiViet bv WHERE bv.deleted != true AND bv.published_at >= :sevenDayAgo ORDER BY RAND()")
+    Page<BaiViet> findSevenDayAgoPosts(Pageable pageable,  LocalDateTime sevenDayAgo);
 
     @Query("SELECT bv FROM BaiViet bv WHERE bv.idBaiViet = :idBaiViet AND bv.deleted != true")
     Optional<BaiViet> findById(@Param("idBaiViet") Long idBaiViet);

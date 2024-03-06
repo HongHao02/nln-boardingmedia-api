@@ -3,13 +3,10 @@ package com.b2012202.mxhtknt.Services.Impl;
 import com.b2012202.mxhtknt.Controller.FileController;
 import com.b2012202.mxhtknt.DTO.*;
 import com.b2012202.mxhtknt.Models.*;
-import com.b2012202.mxhtknt.Repositories.BinhLuanRepository;
-import com.b2012202.mxhtknt.Repositories.UserRepository;
+import com.b2012202.mxhtknt.Repositories.*;
 import com.b2012202.mxhtknt.Request.BaiVietRequest;
 import com.b2012202.mxhtknt.Request.ResponseObject;
 import com.b2012202.mxhtknt.Models.EmbeddedId.PhongID;
-import com.b2012202.mxhtknt.Repositories.BaiVietRepository;
-import com.b2012202.mxhtknt.Repositories.PhongRepository;
 import com.b2012202.mxhtknt.Request.UpdateBaiVietRequest;
 import com.b2012202.mxhtknt.Services.BaiVietService;
 import com.b2012202.mxhtknt.Services.IStorageService;
@@ -25,6 +22,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 
 import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 
 @Service
@@ -36,6 +34,7 @@ public class BaiVietServiceImpl implements BaiVietService {
     private final IStorageService iStorageService;
     private final BaiVietRepository baiVietRepository;
     private final BinhLuanRepository binhLuanRepository;
+    private final NhaTroRepository nhaTroRepository;
 
     @Override
     public ResponseObject createBaiViet(BaiVietRequest baiVietRequest) {
@@ -59,7 +58,7 @@ public class BaiVietServiceImpl implements BaiVietService {
                     .lock(baiVietRequest.isLock())
                     .user(existUser)
                     .deleted(false)
-                    .published_at(LocalDateTime.now())
+                    .published_at(LocalDateTime.now(ZoneId.systemDefault()))
                     .phongSet(new HashSet<>())
                     .build();
             System.out.println("~~~PHONG SET: " + baiViet.getPhongSet());
@@ -153,13 +152,15 @@ public class BaiVietServiceImpl implements BaiVietService {
     public ResponseObject getBaiVietListFollowPage(int page, int size) {
         try {
             Pageable pageable = PageRequest.of(page, size);
-            Page<BaiViet> baiVietPage = baiVietRepository.findAll(pageable);
+            LocalDateTime sevenDayAgo= LocalDateTime.now(ZoneId.systemDefault()).minusDays(7);
+            Page<BaiViet> baiVietPage = baiVietRepository.findSevenDayAgoPosts(pageable, sevenDayAgo);
             List<BaiViet> baiVietList = baiVietPage.getContent();
             List<BaiVietDTO> baiVietDTOList = new ArrayList<>();
             for (BaiViet bv : baiVietList) {
-                int countLikes = userRepository.countLikesByIdBaiViet(bv.getIdBaiViet());
-                int countComments = binhLuanRepository.countCommentsByIdBaiViet(bv.getIdBaiViet());
                 BaiVietDTO baiVietDTO = convertToBaiVietDTO(bv);
+                if(baiVietDTO == null){
+                    return new ResponseObject("failed", "fail to convert post to expected data", null);
+                }
                 baiVietDTOList.add(baiVietDTO);
             }
             return new ResponseObject("ok", "get list of bai viet follow by page and size successfully", baiVietDTOList);
@@ -197,7 +198,7 @@ public class BaiVietServiceImpl implements BaiVietService {
                 existBaiViet.setDescription(updateBaiVietRequest.getDescription());
             }
             existBaiViet.setLock(updateBaiVietRequest.isLock());
-            existBaiViet.setLast_update(LocalDateTime.now());
+            existBaiViet.setLast_update(LocalDateTime.now(ZoneId.systemDefault()));
             if(!updateBaiVietRequest.getFiles().isEmpty()){
                 ConvertSetFileDTO cv= iStorageService.convertToSetFile(updateBaiVietRequest.getFiles());
                 if(!cv.getMessage().equals("success")){
@@ -214,8 +215,40 @@ public class BaiVietServiceImpl implements BaiVietService {
     public BaiVietDTO convertToBaiVietDTO(BaiViet bv) {
         int countLikes = userRepository.countLikesByIdBaiViet(bv.getIdBaiViet());
         int countComments = binhLuanRepository.countCommentsByIdBaiViet(bv.getIdBaiViet());
+        Phong phong = null;
+        for(Phong p: bv.getPhongSet()){
+            phong= Phong.builder()
+                    .lau(p.getLau())
+                    .deleted(p.getDeleted())
+                    .loaiPhong(p.getLoaiPhong())
+                    .tinhTrang(p.isTinhTrang())
+                    .giaPhong(p.getGiaPhong())
+                    .sttPhong(p.getSttPhong())
+                    .phongID(p.getPhongID())
+                    .build();
+            break;
+        }
+        if(phong==null){
+            return null;
+        }
+        PhongDTO phongDTO= PhongDTO.builder()
+                .idNhaTro(phong.getPhongID().getIdNhaTro())
+                .idLau(phong.getPhongID().getIdLau())
+                .idPhong(phong.getPhongID().getIdPhong())
+                .sttLau(phong.getLau().getSttLau())
+                .sttPhong(phong.getSttPhong())
+                .tenNhaTro(phong.getLau().getNhaTro().getTenNhaTro())
+                .tinhTrang(phong.isTinhTrang())
+                .deleted(phong.getDeleted())
+                .giaPhong(phong.getGiaPhong())
+                .tenDuong(phong.getLau().getNhaTro().getTuyenDuong().getTenDuong())
+                .tenXa(phong.getLau().getNhaTro().getXa().getXaID().getTenXa())
+                .tenHuyen(phong.getLau().getNhaTro().getXa().getHuyen().getHuyenID().getTenHuyen())
+                .tenTinh(phong.getLau().getNhaTro().getXa().getHuyen().getHuyenID().getTenTinh())
+                .build();
         return BaiVietDTO.builder()
                 .idBaiViet(bv.getIdBaiViet())
+                .phong(phongDTO)
                 .user(UserDTO.builder()
                         .id(bv.getUser().getId())
                         .username(bv.getUser().getUsername())
@@ -241,8 +274,40 @@ public class BaiVietServiceImpl implements BaiVietService {
     public BaiVietDTO convertToBaiVietDTO(BaiViet bv, User user) {
         int countLikes = userRepository.countLikesByIdBaiViet(bv.getIdBaiViet());
         int countComments = binhLuanRepository.countCommentsByIdBaiViet(bv.getIdBaiViet());
+        Phong phong = null;
+        for(Phong p: bv.getPhongSet()){
+            phong= Phong.builder()
+                    .lau(p.getLau())
+                    .deleted(p.getDeleted())
+                    .loaiPhong(p.getLoaiPhong())
+                    .tinhTrang(p.isTinhTrang())
+                    .giaPhong(p.getGiaPhong())
+                    .sttPhong(p.getSttPhong())
+                    .phongID(p.getPhongID())
+                    .build();
+            break;
+        }
+        if(phong==null){
+            return null;
+        }
+        PhongDTO phongDTO= PhongDTO.builder()
+                .idNhaTro(phong.getPhongID().getIdNhaTro())
+                .idLau(phong.getPhongID().getIdLau())
+                .idPhong(phong.getPhongID().getIdPhong())
+                .sttLau(phong.getLau().getSttLau())
+                .sttPhong(phong.getSttPhong())
+                .tenNhaTro(phong.getLau().getNhaTro().getTenNhaTro())
+                .tinhTrang(phong.isTinhTrang())
+                .deleted(phong.getDeleted())
+                .giaPhong(phong.getGiaPhong())
+                .tenDuong(phong.getLau().getNhaTro().getTuyenDuong().getTenDuong())
+                .tenXa(phong.getLau().getNhaTro().getXa().getXaID().getTenXa())
+                .tenHuyen(phong.getLau().getNhaTro().getXa().getHuyen().getHuyenID().getTenHuyen())
+                .tenTinh(phong.getLau().getNhaTro().getXa().getHuyen().getHuyenID().getTenTinh())
+                .build();
         return BaiVietDTO.builder()
                 .idBaiViet(bv.getIdBaiViet())
+                .phong(phongDTO)
                 .user(null)
                 .description(bv.getDescription())
                 .published_at(bv.getPublished_at())

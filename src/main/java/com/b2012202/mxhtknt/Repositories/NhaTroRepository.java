@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public interface NhaTroRepository extends JpaRepository<NhaTro, Long> {
     @Query("SELECT n FROM NhaTro n WHERE n.tenNhaTro LIKE %:tenNhaTro% AND n.deleted = false")
-    Page<NhaTro> findByTenContaining(@Param("tenNhaTro") String ten, Pageable pageable);
+    Page<NhaTro> findByTenContaining(@Param("tenNhaTro") String tenNhaTro, Pageable pageable);
 
     @Query("SELECT nt FROM NhaTro nt " +
             "WHERE nt.tuyenDuong.tenDuong = :tenDuong " +

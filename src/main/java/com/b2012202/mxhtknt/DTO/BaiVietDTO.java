@@ -18,14 +18,15 @@ import java.util.Set;
 @Builder
 public class BaiVietDTO {
     private Long idBaiViet;
-    private UserDTO user;
     private String description;
+    private int countLikes;
+    private int countComments;
     private LocalDateTime published_at;
     private LocalDateTime last_update;
     private boolean lock;
+    private UserDTO user;
     private Set<File> fileSet = new HashSet<>();
+    private PhongDTO phong;
     private Set<Phong> phongSet = new HashSet<>();
-    private int countLikes;
-    private int countComments;
     private Boolean deleted;
 }

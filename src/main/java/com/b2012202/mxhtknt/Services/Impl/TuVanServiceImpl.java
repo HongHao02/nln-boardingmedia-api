@@ -18,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -74,7 +75,7 @@ public class TuVanServiceImpl implements TuVanService {
                         .chiTietTuVanID(new ChiTietTuVanID())
                         .tuVan(tuVanSaved)
                         .phong(existPhong)
-                        .thoiGianTuVan(LocalDateTime.now())
+                        .thoiGianTuVan(LocalDateTime.now(ZoneId.systemDefault()))
                         .build();
                 tuVanSaved.getChiTietTuVanSet().add(chiTietTuVan);
                 return new ResponseObject("ok", "Create tu van successfully", tuVanRepository.save(tuVanSaved));

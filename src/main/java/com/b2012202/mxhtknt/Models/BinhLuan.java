@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Entity
 @Table(name="BINH_LUAN")
@@ -42,5 +43,5 @@ public class BinhLuan {
     private String noiDung;
 
     @Column(name = "THOIGIANBL")
-    private LocalDateTime thoiGianBL;
+    private LocalDateTime thoiGianBL = LocalDateTime.now(ZoneId.systemDefault());
 }

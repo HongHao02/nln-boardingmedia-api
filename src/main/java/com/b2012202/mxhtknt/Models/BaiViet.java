@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -37,9 +38,9 @@ public class BaiViet {
     @Column(name = "DESCIPTION")
     private String description;
     @Column(name = "PUBLISHED_AT")
-    private LocalDateTime published_at = LocalDateTime.now();
+    private LocalDateTime published_at = LocalDateTime.now(ZoneId.systemDefault());
     @Column(name = "LAST_UPDATE")
-    private LocalDateTime last_update = LocalDateTime.now();
+    private LocalDateTime last_update = LocalDateTime.now(ZoneId.systemDefault());
     @Column(name = "LOCK")
     private boolean lock;
     @Column(name = "DELETED")

@@ -58,7 +58,7 @@ public class BaiVietServiceImpl implements BaiVietService {
                     .lock(baiVietRequest.isLock())
                     .user(existUser)
                     .deleted(false)
-                    .published_at(LocalDateTime.now(ZoneId.systemDefault()))
+                    .published_at(LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh")))
                     .phongSet(new HashSet<>())
                     .build();
             System.out.println("~~~PHONG SET: " + baiViet.getPhongSet());
@@ -152,7 +152,7 @@ public class BaiVietServiceImpl implements BaiVietService {
     public ResponseObject getBaiVietListFollowPage(int page, int size) {
         try {
             Pageable pageable = PageRequest.of(page, size);
-            LocalDateTime sevenDayAgo= LocalDateTime.now(ZoneId.systemDefault()).minusDays(7);
+            LocalDateTime sevenDayAgo= LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh")).minusDays(7);
             Page<BaiViet> baiVietPage = baiVietRepository.findSevenDayAgoPosts(pageable, sevenDayAgo);
             List<BaiViet> baiVietList = baiVietPage.getContent();
             List<BaiVietDTO> baiVietDTOList = new ArrayList<>();
@@ -198,7 +198,7 @@ public class BaiVietServiceImpl implements BaiVietService {
                 existBaiViet.setDescription(updateBaiVietRequest.getDescription());
             }
             existBaiViet.setLock(updateBaiVietRequest.isLock());
-            existBaiViet.setLast_update(LocalDateTime.now(ZoneId.systemDefault()));
+            existBaiViet.setLast_update(LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh")));
             if(!updateBaiVietRequest.getFiles().isEmpty()){
                 ConvertSetFileDTO cv= iStorageService.convertToSetFile(updateBaiVietRequest.getFiles());
                 if(!cv.getMessage().equals("success")){

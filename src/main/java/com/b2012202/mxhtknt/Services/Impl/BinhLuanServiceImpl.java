@@ -46,7 +46,7 @@ public class BinhLuanServiceImpl implements BinhLuanService {
                     .baiViet(existBaiViet)
                     .user(existUser)
                     .noiDung(binhLuanRequest.getNoiDung())
-                    .thoiGianBL(LocalDateTime.now(ZoneId.systemDefault()))
+                    .thoiGianBL(LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh")))
                     .build();
             binhLuanRepository.save(binhLuan);
             int countComments= binhLuanRepository.countCommentsByIdBaiViet(existBaiViet.getIdBaiViet());

@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BaiVietRepository extends JpaRepository<BaiViet, Long> {
-    @Query("SELECT bv FROM BaiViet bv WHERE bv.deleted != true AND bv.published_at >= :sevenDayAgo ORDER BY RAND()")
+    @Query("SELECT bv FROM BaiViet bv WHERE bv.deleted != true AND bv.published_at >= :sevenDayAgo ORDER BY NEWID()")
     Page<BaiViet> findSevenDayAgoPosts(Pageable pageable,  LocalDateTime sevenDayAgo);
 
     @Query("SELECT bv FROM BaiViet bv WHERE bv.idBaiViet = :idBaiViet AND bv.deleted != true")

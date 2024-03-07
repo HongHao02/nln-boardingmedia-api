@@ -75,7 +75,7 @@ public class TuVanServiceImpl implements TuVanService {
                         .chiTietTuVanID(new ChiTietTuVanID())
                         .tuVan(tuVanSaved)
                         .phong(existPhong)
-                        .thoiGianTuVan(LocalDateTime.now(ZoneId.systemDefault()))
+                        .thoiGianTuVan(LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh")))
                         .build();
                 tuVanSaved.getChiTietTuVanSet().add(chiTietTuVan);
                 return new ResponseObject("ok", "Create tu van successfully", tuVanRepository.save(tuVanSaved));

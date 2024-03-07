@@ -113,7 +113,24 @@ public class NhaTroServiceImpl implements NhaTroService {
             if (existTuyenDuong == null || !existXa.getTuyenDuongSet().contains(existTuyenDuong)) {
                 return new ResponseObject("failed", "Ten duong invalid", null);
             }
-            return new ResponseObject("ok", "Get list nha tro by absolute address", nhaTroRepository.findByAbsoluteAddress(tenDuong, tenXa, tenHuyen, tenTinh, pageable));
+            Page<NhaTro> nhaTroPage= nhaTroRepository.findByAbsoluteAddress(tenDuong, tenXa, tenHuyen, tenTinh, pageable);
+            List<NhaTro> nhaTroList= nhaTroPage.getContent();
+            List<NhaTroDTO> nhaTroDTOList= new ArrayList<>();
+            for(NhaTro nt: nhaTroList){
+                NhaTroDTO nhaTroDTO = NhaTroDTO.builder()
+                        .id(nt.getUser().getId())
+                        .username(nt.getUser().getUsername())
+                        .idNhaTro(nt.getIdNhaTro())
+                        .tenNhaTro(nt.getTenNhaTro())
+                        .tenDuong(nt.getTuyenDuong().getTenDuong())
+                        .tenXa(nt.getXa().getXaID().getTenXa())
+                        .tenHuyen(nt.getXa().getXaID().getTenHuyen())
+                        .tenTinh(nt.getXa().getXaID().getTenTinh())
+                        .lauSet(null)
+                        .build();
+                nhaTroDTOList.add(nhaTroDTO);
+            }
+            return new ResponseObject("ok", "Get list nha tro by absolute address", nhaTroDTOList);
         } catch (Exception ex) {
             return new ResponseObject("failed", ex.getMessage(), null);
         }

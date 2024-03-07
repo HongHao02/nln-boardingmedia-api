@@ -43,5 +43,5 @@ public class BinhLuan {
     private String noiDung;
 
     @Column(name = "THOIGIANBL")
-    private LocalDateTime thoiGianBL = LocalDateTime.now(ZoneId.systemDefault());
+    private LocalDateTime thoiGianBL = LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
 }

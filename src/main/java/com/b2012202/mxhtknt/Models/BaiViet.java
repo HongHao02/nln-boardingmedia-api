@@ -38,9 +38,9 @@ public class BaiViet {
     @Column(name = "DESCIPTION")
     private String description;
     @Column(name = "PUBLISHED_AT")
-    private LocalDateTime published_at = LocalDateTime.now(ZoneId.systemDefault());
+    private LocalDateTime published_at = LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
     @Column(name = "LAST_UPDATE")
-    private LocalDateTime last_update = LocalDateTime.now(ZoneId.systemDefault());
+    private LocalDateTime last_update = LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
     @Column(name = "LOCK")
     private boolean lock;
     @Column(name = "DELETED")

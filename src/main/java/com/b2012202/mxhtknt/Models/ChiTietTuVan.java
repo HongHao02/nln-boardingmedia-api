@@ -21,7 +21,7 @@ public class ChiTietTuVan {
     private ChiTietTuVanID chiTietTuVanID;
 
     @Column(name = "THOIGIANTUVAN")
-    private LocalDateTime thoiGianTuVan = LocalDateTime.now(ZoneId.systemDefault());
+    private LocalDateTime thoiGianTuVan = LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
 
 
 

@@ -12,9 +12,9 @@ public interface BinhLuanRepository extends JpaRepository<BinhLuan, Long> {
     @Query("SELECT bl FROM BinhLuan bl WHERE bl.baiViet.idBaiViet = :idBaiViet ORDER BY bl.thoiGianBL DESC")
     List<BinhLuan> findByBaiViet_IdBaiViet(@Param("idBaiViet") Long idBaiViet);
 
-    @Query("SELECT bl FROM BinhLuan bl WHERE bl.baiViet.idBaiViet = :idBaiViet ORDER BY bl.thoiGianBL DESC")
-    List<BinhLuan> findByBaiVietId(@Param("idBaiViet") Long idBaiViet);
+//    @Query("SELECT bl FROM BinhLuan bl WHERE bl.baiViet.idBaiViet = :idBaiViet")
+//    List<BinhLuan> findByBaiVietId(@Param("idBaiViet") Long idBaiViet);
 
-    @Query("SELECT COUNT(bl) FROM BinhLuan bl WHERE bl.baiViet.idBaiViet = :idBaiViet ORDER BY bl.thoiGianBL DESC")
+    @Query("SELECT COUNT(bl) FROM BinhLuan bl WHERE bl.baiViet.idBaiViet = :idBaiViet")
     int countCommentsByIdBaiViet(@Param("idBaiViet") Long idBaiViet);
 }

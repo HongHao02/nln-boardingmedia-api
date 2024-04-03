@@ -28,6 +28,4 @@ public interface TuVanRepository extends JpaRepository<TuVan, Long> {
 //    @Query("SELECT tv FROM TuVan tv WHERE tv.user.id= :id AND tv.baiViet.deleted != true")
     @Query("SELECT tv FROM TuVan tv JOIN FETCH tv.chiTietTuVanSet c WHERE tv.user.id = :id AND tv.baiViet.deleted != true ORDER BY c.thoiGianTuVan DESC")
     List<TuVan> findByUserId(@Param("id") Long id);
-
-
 }

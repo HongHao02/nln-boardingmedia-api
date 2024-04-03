@@ -9,11 +9,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 @Repository
 public interface BinhLuanRepository extends JpaRepository<BinhLuan, Long> {
-    List<BinhLuan> findByBaiViet_IdBaiViet(Long idBaiViet);
+    @Query("SELECT bl FROM BinhLuan bl WHERE bl.baiViet.idBaiViet = :idBaiViet ORDER BY bl.thoiGianBL DESC")
+    List<BinhLuan> findByBaiViet_IdBaiViet(@Param("idBaiViet") Long idBaiViet);
 
-    @Query("SELECT bl FROM BinhLuan bl WHERE bl.baiViet.idBaiViet = :idBaiViet")
+    @Query("SELECT bl FROM BinhLuan bl WHERE bl.baiViet.idBaiViet = :idBaiViet ORDER BY bl.thoiGianBL DESC")
     List<BinhLuan> findByBaiVietId(@Param("idBaiViet") Long idBaiViet);
 
-    @Query("SELECT COUNT(bl) FROM BinhLuan bl WHERE bl.baiViet.idBaiViet = :idBaiViet")
+    @Query("SELECT COUNT(bl) FROM BinhLuan bl WHERE bl.baiViet.idBaiViet = :idBaiViet ORDER BY bl.thoiGianBL DESC")
     int countCommentsByIdBaiViet(@Param("idBaiViet") Long idBaiViet);
 }

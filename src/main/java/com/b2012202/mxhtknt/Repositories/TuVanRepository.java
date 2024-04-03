@@ -26,6 +26,6 @@ public interface TuVanRepository extends JpaRepository<TuVan, Long> {
     @Query("SELECT COUNT(tv) FROM TuVan tv WHERE tv.user.id= :id AND tv.baiViet.deleted != true AND tv.viewed= true")
     int countViewedByUserId(@Param("id") Long id);
 //    @Query("SELECT tv FROM TuVan tv WHERE tv.user.id= :id AND tv.baiViet.deleted != true")
-    @Query("SELECT tv FROM TuVan tv JOIN FETCH tv.chiTietTuVanSet c WHERE tv.user.id = :id AND tv.baiViet.deleted != true ORDER BY c.thoiGianTuVan DESC")
+    @Query("SELECT tv FROM TuVan tv JOIN FETCH tv.chiTietTuVanSet c WHERE tv.user.id = :id AND tv.baiViet.deleted != true")
     List<TuVan> findByUserId(@Param("id") Long id);
 }
